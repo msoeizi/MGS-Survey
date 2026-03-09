@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Company {
+  id              String                 @id @default(uuid())
+  name            String
+  normalized_name String                 @unique
+  domain          String?
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  contacts        Contact[]
+  projectInvites  CompanyProjectInvite[]
+  feedbackItems   FeedbackItem[]
+  generalFeedback GeneralFeedback[]
+  accessTokens    AccessToken[]
+}
+
+model Contact {
+  id              String             @id @default(uuid())
+  companyId       String
+  company         Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name            String
+  email           String             @unique
+  phone           String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  projectInvites  CompanyProjectInvite[]
+  feedbackItems   FeedbackItem[]
+  generalFeedback GeneralFeedback[]
+  accessTokens    AccessToken[]
+}
+
+model Project {
+  id                String                 @id @default(uuid())
+  project_unique_id String                 @unique
+  project_name      String
+  invited_date      DateTime?
+  invited_by        String?
+  submitted_price   Decimal?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  companyInvites    CompanyProjectInvite[]
+  feedbackItems     FeedbackItem[]
+}
+
+model CompanyProjectInvite {
+  id              String    @id @default(uuid())
+  companyId       String
+  projectId       String
+  contactId       String?   // Track exactly who invited MGS
+  invited_date    DateTime? // Optional override of project's invited_date
+  submitted_price Decimal?  // Optional override of project's submitted_price
+  createdAt       DateTime  @default(now())
+  company         Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contact         Contact?  @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  // A company is invited to a project only once, but now the invite maps down to the specific user 
+  // (we'll keep the unique constraint just on company/project to avoid duplicate invites for the same GC)
+  @@unique([companyId, projectId])
+}
+
+model Batch {
+  id              String            @id @default(uuid())
+  name            String
+  status          String            @default("Draft") // Draft, Open, Closed, Archived
+  open_at         DateTime?
+  close_at        DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  feedbackItems   FeedbackItem[]
+  generalFeedback GeneralFeedback[]
+}
+
+model FeedbackItem {
+  id                   String    @id @default(uuid())
+  batchId              String
+  companyId            String
+  projectId            String
+  contactId            String
+  status               String    @default("Draft") // Draft, InProgress, Submitted, Locked
+  awarded              String?   // Yes, No, Unknown
+  carried_price        Decimal?  // "What was the millwork quote price you carried?"
+  reason_not_carried   String?   // "What was main reason we were not the first choice?"
+  how_to_improve       String?   // "What could have we done to win this project?"
+  quote_reasonableness String?   // "How reasonable was our quote?"
+  awarded_price        Decimal?
+  comments             String?
+  submitted_at         DateTime?
+  updatedAt            DateTime  @updatedAt
+
+  batch   Batch   @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: NoAction)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  // Uniqueness includes contactId now so multiple estimators from the same GC 
+  // can review the same project without collision
+  @@unique([batchId, companyId, projectId, contactId])
+}
+
+model GeneralFeedback {
+  id                    String    @id @default(uuid())
+  batchId               String
+  companyId             String
+  contactId             String
+  relationship_feedback String?   // "Overall feedback on what we can do to improve our relationships..."
+  follow_up_impact      String?   // "How much impact does a follow up call have..."
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  batch   Batch   @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: NoAction)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@unique([batchId, companyId, contactId])
+}
+
+model AccessToken {
+  id           String    @id @default(uuid())
+  token        String    @unique
+  token_type   String    // Company, Contact
+  companyId    String
+  contactId    String?
+  batchId      String?
+  expires_at   DateTime?
+  revoked_at   DateTime?
+  created_at   DateTime  @default(now())
+  last_used_at DateTime?
+
+  // Re-adding correct explicit relations to fix cascade errors during db push
+  company Company  @relation(fields: [companyId], references: [id], onDelete: NoAction)
+  contact Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}

@@ -1,0 +1,1118 @@
+2026-03-01T15:15:27.845Z - ERROR: PrismaClientValidationError: 
+Invalid `tx.accessToken.createMany()` invocation in
+C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\[root-of-the-server]__9ede0f2a._.js:233:53
+
+  230     console.log(`[CreateBatch] Transaction: Created ${fi.count} feedback items`);
+  231 }
+  232 if (tokenCreations.length > 0) {
+→ 233     const tk = await tx.accessToken.createMany({
+            data: [
+              {
+                token: "p13OmOCeMPNtJK5aoucccp9NnnCoEKzt",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "0d86ccf7-a1ee-475d-99bc-5d27de412ec1",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "fQmRHkXx6qW2bShMAgg85sJpcAWRlUzv",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "900cd327-9629-4944-87d3-57e104893b6b",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "ERlhk173QryK93oVoruXLPETcevGQwx0",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "4a8c1c03-e26b-4ce5-b27d-f8c1dd6dddea",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "gzMkfZOJe9v68d-Wbsssiz10RftsoFuZ",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "16f42337-6e3c-4d69-9c60-8ff62eb5dd34",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "8CAd-cA03Ev0VU1QRCUwjxJ3xfw1dm_b",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "503bee26-1efc-47ef-9074-055037659992",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "zotWSsqaUeBrj_7AnxScbTkkPA_b91zM",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "48ee486f-5c3b-410f-927d-897b35d6e7fd",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "43o4cobZIcEAsurxYGZdPJe-MJJRjMKl",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "006196f9-8fed-403f-99a7-8fa70ae6d83a",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "3SGpwb4LOibW9au8H4nFxxjgWv37hheU",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "468a4b7a-aff9-49a9-b0b8-3a558731fb1a",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "zbJ28nea00N-prLaDhJUxxhdVdQ95iZY",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "cdb217a1-00db-4da8-8126-8c294c09fe69",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "LrBj8-BunD770skk8UYmtgjfuTYRtCnV",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "eb2975ae-3b43-4d69-a90a-580ab451f727",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "OjcdkU1MQUcOUMatr4dzUCNj9-XbTvAi",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "72282856-206d-4236-a411-1ca5bf273632",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "fbCBhXMM4mHpF7KHAqnZyVxecLEocm4c",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "5a1a741d-bf93-436c-ab21-f4bfa11fb2e3",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "hUlKvmn-xcHyASMLL3PRrEtabrMNUVfy",
+                token_type: "Contact",
+                companyId: "2d38637a-234b-4702-9f0c-8770d95ec951",
+                contactId: "01ba7708-6978-4ded-935b-7a23acc692b8",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "TT-IfTNpwv260Bw-ZxH4s-wd9zYu9aqo",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "4e82290e-5ae1-4cdc-81e9-ef744113304f",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Yp02vtunLwUEkBgaArPzF6FXOvUQJ9KE",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "648e7794-484a-4a0b-922c-38fc40d0fcfa",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "F6IDT7B26phbDmWry2tWor2wedVk7nlL",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "6d7d28c9-8721-41b3-a0d3-bee4fa6770df",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Rx210eRlIN4WKfj3SBKMo74ItfFx_2A1",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "9ccef256-e175-44d2-835b-3ffc6e9c9606",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "7h3SVlHZVm_xkMdZ1kSqB90RWl2EwtOx",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "b6e3647b-c0d5-44b9-94c1-fe22746bf58f",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Za4vpLI-VZifVARV3RTR0gs76EC0fCeS",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "8a398cfb-3f25-4f3b-a330-d6210fc9dccd",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "ZaB9j1_qOFUlwUGTMzoJ_YKdP1atZdqU",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "112e1cd6-4364-4a69-aced-5f463ff6407e",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "U_3eb-CzZmHb4pLQuFvJiuZwGSvZv5Ph",
+                token_type: "Contact",
+                companyId: "2e70c818-55e5-4516-adb5-a184e0fbcef4",
+                contactId: "bd6d6dc6-7982-4037-a2aa-39cc58bf75f9",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "dGVlrE5cXwJSKNI5UJTQCxv6wIYGPfP0",
+                token_type: "Contact",
+                companyId: "2e70c818-55e5-4516-adb5-a184e0fbcef4",
+                contactId: "93a2af16-cfa9-4780-b604-5f99fb6840ee",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "vSZhjhTLHO7KQugkERqmAZFXoZ16ghvA",
+                token_type: "Contact",
+                companyId: "2e70c818-55e5-4516-adb5-a184e0fbcef4",
+                contactId: "215593d0-c45d-497c-b1ce-036c96bae6ea",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "vA4vqLM6rvaaHFhED3zHMHLoeB_llyJr",
+                token_type: "Contact",
+                companyId: "2e81354c-a99e-4bff-a71a-95010c1c5986",
+                contactId: "3ff30e71-32b3-4bcf-8871-a0047f451100",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "StwdziiG2b3i2Ayg-_lefdNsqNn8PL2X",
+                token_type: "Contact",
+                companyId: "2efe8eaa-1842-4cb3-9d9e-f911f7209598",
+                contactId: "335f9556-a791-4fe7-8419-915d84db143c",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "HHTbe9bM0jju1-AEEmR62TAsg3c8vICE",
+                token_type: "Contact",
+                companyId: "3eb95861-4b6a-4bd3-a253-bc54e6a5d038",
+                contactId: "77ad8ce6-152d-436f-af97-4cfad697844f",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "tQ4hEmOAcobatLwLsrkrNd-YmzJjqBrQ",
+                token_type: "Contact",
+                companyId: "3eb95861-4b6a-4bd3-a253-bc54e6a5d038",
+                contactId: "3a8b5456-a32c-464c-9e44-e7c6c8fd91e9",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Wu5sTZT67cK405cPzKmc5LQvQyGDiF_x",
+                token_type: "Contact",
+                companyId: "49c91bcf-08f5-4561-8790-794c7bd42dc0",
+                contactId: "94f385bf-a57b-4de0-8598-6f2aa1ec8ee8",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "hRGHPvupQASHlEIEG3-fbEE3juIENoH0",
+                token_type: "Contact",
+                companyId: "4d292377-65ed-4700-9d54-bba2d0578d9f",
+                contactId: "67ee8c9b-70fd-4f06-aefc-ac6181e5b69c",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "4_u9WF9KL6Mz9GeRSQN12I3HL8W5mVfS",
+                token_type: "Contact",
+                companyId: "4d887fb3-51f6-43c7-97ff-bfca9e52ad91",
+                contactId: "f04ce4ff-49dd-49e0-a3f0-5ab9bd544c3a",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "ni6zzgoOZnbK_oVNTNdGssjAJzm9W9vF",
+                token_type: "Contact",
+                companyId: "58b41eb2-31f7-4b10-933d-b400efe414c1",
+                contactId: "d94352e2-7c6c-4e3e-a35d-1a08efd77009",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "qWjw_aABj6fJfrkbcryPJYtM_a06VStJ",
+                token_type: "Contact",
+                companyId: "58b41eb2-31f7-4b10-933d-b400efe414c1",
+                contactId: "b8e45d54-9d2b-40b8-b2a0-be75fa6a1511",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "uk22EzX2tX5K6ZrfGWxpccck-2nL2B7X",
+                token_type: "Contact",
+                companyId: "63772c23-5818-4973-9328-f7b72d8b79d6",
+                contactId: "c254d480-0fe8-4461-8c4a-cbc584500ae7",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "T3iXwO6abxhgGJhZa7NpllCdFOoqMykA",
+                token_type: "Contact",
+                companyId: "6caacec1-5c6c-4cb8-b422-76c2a06eb346",
+                contactId: "57a119a9-a230-4ce2-965e-1825fc4cc28b",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Ckawh7avBoabRoue8oo5kYzEX2Z5bBVH",
+                token_type: "Contact",
+                companyId: "6caacec1-5c6c-4cb8-b422-76c2a06eb346",
+                contactId: "0f842e21-3d3f-4972-b834-0e92e7095ffc",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "aqzzSGJ1J88jOJaJedSOg71a4eA_wDOJ",
+                token_type: "Contact",
+                companyId: "70980471-c965-48ee-8927-9dc6ae1cea34",
+                contactId: "4a3e3594-38a1-4114-b6bb-f9464455e9fd",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "GXIhnaqYyr6XfnwfK7QQqBDSrqsMVQ6T",
+                token_type: "Contact",
+                companyId: "70980471-c965-48ee-8927-9dc6ae1cea34",
+                contactId: "2db5ee2b-672a-454c-a05e-6c9c94c329e7",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "A2heqlW0MwX3ce7erUWTLvMI91336GYx",
+                token_type: "Contact",
+                companyId: "715e5349-b0c8-4294-89ac-f04e12a9aed2",
+                contactId: "b4647034-d41d-49eb-b709-8fcd0567187e",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "3X0tU_DikYL6saGAaHsMXeiwahMKul-n",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "05692028-7388-4d93-a8be-d405edc09d80",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "nnTqCCn_uKrZEJzAC9WlAxxfIFfQB1ul",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "acc7bd94-5cb3-45d4-8d24-8ba219ae0cf6",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "CWKjnEXrh4tyw5vre2fBlJ2ames_chUC",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "2cbd01d0-04f5-4d76-b927-01e73f8395fb",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "hAAc_ZhTFygg6-ik9FZ8YpULcuhNmgT1",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "338181de-53c3-426c-820d-efddc0289fff",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "iFeg29hPin1Wx0QCROV29Uh_k5EzWB6d",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "52cb8d90-ffbf-4181-a27b-1d81988b6807",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "GuvDU-IOVZt706fohI2_XbNE94iI0CVh",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "6956cd58-ff61-48ed-a4da-042f83722b05",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "-RGqXSmKOpyL1SxJSdOaCZf0S9nAxYp9",
+                token_type: "Contact",
+                companyId: "80fa105d-9526-4fb2-b6e6-d38abb0ffd47",
+                contactId: "3b465d1b-d6c8-41c1-9177-5c02d107b321",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "_X1It0TN4haXG909Ek1SXQhuSPaiFlAm",
+                token_type: "Contact",
+                companyId: "85c31843-ea8b-49c0-bc6e-9de8e8e7f583",
+                contactId: "b0a00271-0993-47d9-8377-fe046eb23e53",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "hHXFiLK-z37nxJ3Z3IgnS9XQVUJkIyv8",
+                token_type: "Contact",
+                companyId: "86d34d58-58e6-446a-8f37-090335854f5d",
+                contactId: "953c33cc-9801-4091-9e47-706124e07998",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "nZ5UZOVMO-VweaBey3C-Jkk4zfPV_sss",
+                token_type: "Contact",
+                companyId: "86d34d58-58e6-446a-8f37-090335854f5d",
+                contactId: "a24ba7b7-b572-41e9-adcf-9d4e7d8f8e19",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "u_mJw0U1ZiH3eB6nXsly1F2gtddaoYKd",
+                token_type: "Contact",
+                companyId: "9583c61a-e3ee-4e57-bd79-b3b2eadbf40d",
+                contactId: "edb34f98-69d9-4104-b822-569a5a7fabe0",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "QHBKG60RkrQxVNgg_ZXtQR9YuFNgl6ZJ",
+                token_type: "Contact",
+                companyId: "9583c61a-e3ee-4e57-bd79-b3b2eadbf40d",
+                contactId: "75c4417a-9b3e-40b2-8635-015796990cfc",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "uxLVjMdOx0uDJ8pPcQ6EjnqbVjosHHV1",
+                token_type: "Contact",
+                companyId: "a2b8833c-80a4-42e4-a239-d9976f237906",
+                contactId: "5bfcae6d-81b4-4744-aee7-a3cc81e6caa8",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "RPY7HoQaICPdkYwZ169FX4Gj2WyTGp8k",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "6c65aaeb-a40f-43e7-bc8c-515021dcc759",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "r2sPqnNNNVzCVKi7K6s4-VQ6H9l_Zpz_",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "c01cce2b-f3e8-4523-91a2-7466158a9acc",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "MXMjZCN6b3Xm8OwPF6fk9ZSpdAAffCut",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "50743e83-d18e-4906-8782-1192be257628",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "d0vpkqSPZYqXrfYevLlUrTe7yuoHLk9D",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "a75fe8be-5f72-474c-bb23-f37396531053",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Mm-t0LM_rynCnyqzprYgxYqpPpWHMNwc",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "50bfda04-aa6f-4874-b62b-e9fab7046cc8",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Qc0iubcHKRPBYfIAU4SBblNiY5t3Fncv",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "b4a146ba-6246-44bf-bf76-371ee03f7f25",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "r5KJZZKGAqPpdTCCEjg01gSwusSUrL5_",
+                token_type: "Contact",
+                companyId: "b3883ad9-caab-4299-8755-93254104c972",
+                contactId: "3135c9ab-6b43-46fa-9530-6114e58a5285",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "ShHBXoUmNZYIgBU_XG-C-yI90aq6uGa6",
+                token_type: "Contact",
+                companyId: "b6a7d47d-2de8-4ebd-95f7-7c67fda953b6",
+                contactId: "9877ccdd-84cf-4a91-a821-d8e38a0eb750",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "RlJJBqnobXiuUdo_odkrI58fMQpT1yvI",
+                token_type: "Contact",
+                companyId: "b8a442a0-76f9-4235-8f7e-6503feca17a5",
+                contactId: "2094421c-fdd3-4345-96ce-f85249f4822b",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Py7U1TxPVRP5Ya4woj17hNCFNirXLInU",
+                token_type: "Contact",
+                companyId: "b8c16969-cfc5-4e4e-b413-b08c5db492ae",
+                contactId: "6b9f3b07-720c-499a-b14a-17af36bbec54",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "DeouxgYGeZplx7IEFF3Ky7Cqay1qfXZY",
+                token_type: "Contact",
+                companyId: "b8c16969-cfc5-4e4e-b413-b08c5db492ae",
+                contactId: "ba1b4238-65ea-4919-8a5a-b9ce5f12e315",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "UKY5Jm0AVqSRiHt9fGGLIhR0ePBkYB0I",
+                token_type: "Contact",
+                companyId: "b90d8e52-4d41-493d-a63e-1232d97f6ce6",
+                contactId: "2911f60f-c85d-4266-bedc-4d90c00253f5",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "QJEOm7n4jfL2_IPI73SnspaulM63dyKH",
+                token_type: "Contact",
+                companyId: "b90d8e52-4d41-493d-a63e-1232d97f6ce6",
+                contactId: "fff65716-013d-419b-9080-281947bbd3c5",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Ioeq_MIshZDS-n0xDsCh8xUBX1LUY9sr",
+                token_type: "Contact",
+                companyId: "b90d8e52-4d41-493d-a63e-1232d97f6ce6",
+                contactId: "f0170c44-10db-4861-bb76-3602c5761622",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "U6-K02KzwkTZZnidz4wFuBLPNo9HnIzn",
+                token_type: "Contact",
+                companyId: "b90d8e52-4d41-493d-a63e-1232d97f6ce6",
+                contactId: "454db6f9-9268-4102-9574-5619a9289ddb",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Zx1fvR_i2QBdXd_PRIU5Jyy5t8zjmS_y",
+                token_type: "Contact",
+                companyId: "cce63b98-d60a-4e86-8603-a485e3a09e74",
+                contactId: "618255dc-debf-412d-9c36-dbba3d68cf1f",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Fz2s2c9mWVvjLaIlRTifQykBHCO2Y7jX",
+                token_type: "Contact",
+                companyId: "d42a3509-0346-47fc-924c-a1c2b205fabe",
+                contactId: "2cd9d5e0-dd9c-40d2-ba59-743ac07be14b",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "YVfKb_7F0D3gnfFvzzqC4hzpo9OW0idN",
+                token_type: "Contact",
+                companyId: "d74da7c5-73fe-4de0-956b-bada5fef3031",
+                contactId: "a53f2bc8-4a2e-44b1-985a-a032528d35ff",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "pN-Umfre6MPjgWjQS49UfpPzESrhIOh0",
+                token_type: "Contact",
+                companyId: "d74da7c5-73fe-4de0-956b-bada5fef3031",
+                contactId: "39a82b55-af3f-4ade-b490-b64dbfd3e95a",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "nsZwgdLE-UTILWeNRhczMfuW-ah_7X3V",
+                token_type: "Contact",
+                companyId: "dc01dfe5-d2ce-4906-998b-300a80b64f44",
+                contactId: "7287c2d7-c3e4-48bf-9ce6-b1acedbc2da6",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "Z4czVZGRNSt6uIbRO7o8EJahNuKCSZAn",
+                token_type: "Contact",
+                companyId: "dc01dfe5-d2ce-4906-998b-300a80b64f44",
+                contactId: "66b51804-7d17-4a53-a558-dec7285541f0",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "5g6aZX390PJIzo-S_0x3910m6qro0qjq",
+                token_type: "Contact",
+                companyId: "e46a911d-63fc-42a7-a4fd-67a8c1f1cbf0",
+                contactId: "cc57172b-623e-4d8f-b000-ccab391d5b2b",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              },
+              {
+                token: "qTiT3M1PXPotXEUeM1fi9J3Ym0E15L1K",
+                token_type: "Contact",
+                companyId: "ea90d87f-24f2-451f-86c0-545aa5700f8d",
+                contactId: "d84f583b-4829-49a2-991e-b7863431cfe9",
+                batchId: "6a96ea11-63b2-42aa-819f-ae63f331be63"
+              }
+            ]
+          })
+
+Argument `tokenHash` is missing.
+    at lr (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:10:1379)
+    at zr.handleRequestError (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:65:7929)
+    at zr.handleAndLogRequestError (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:65:7581)
+    at zr.request (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:65:7288)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async a (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:75:5816)
+    at async C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\[root-of-the-server]__9ede0f2a._.js:233:32
+    at async Proxy._transactionWithCallback (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:75:4390)
+    at async POST (C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\[root-of-the-server]__9ede0f2a._.js:225:13)
+    at async AppRouteRouteModule.do (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:37866)
+    at async AppRouteRouteModule.handle (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:45156)
+    at async responseGenerator (C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\node_modules_next_294ee2f9._.js:15350:38)
+    at async AppRouteRouteModule.handleResponse (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:1:191938)
+    at async handleResponse (C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\node_modules_next_294ee2f9._.js:15413:32)
+    at async Module.handler (C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\node_modules_next_294ee2f9._.js:15466:13)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:1442:9)
+    at async DevServer.renderPageComponent (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:1494:24)
+    at async DevServer.renderToResponseImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:1544:32)
+    at async DevServer.pipeImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:1038:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\next-server.js:395:17)
+    at async DevServer.handleRequestImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:929:17)
+    at async C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\dev\next-dev-server.js:387:20
+    at async Span.traceAsyncFn (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\trace\trace.js:157:20)
+    at async DevServer.handleRequest (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\dev\next-dev-server.js:383:24)
+    at async invokeRender (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\lib\router-server.js:248:21)
+    at async handleRequest (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\lib\router-server.js:447:24)
+    at async requestHandlerImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\lib\router-server.js:496:13)
+    at async Server.requestListener (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\lib\start-server.js:226:13)
+2026-03-01T15:17:46.105Z - ERROR: PrismaClientValidationError: 
+Invalid `tx.accessToken.createMany()` invocation in
+C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\[root-of-the-server]__9ede0f2a._.js:235:53
+
+  232     console.log(`[CreateBatch] Transaction: Created ${fi.count} feedback items`);
+  233 }
+  234 if (tokenCreations.length > 0) {
+→ 235     const tk = await tx.accessToken.createMany({
+            data: [
+              {
+                token: "5KH2YXmFLoF2XQz3nnqBrKHQKUkI0_gr",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "0d86ccf7-a1ee-475d-99bc-5d27de412ec1",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "nyDNmnBogc7TP3UfgzoD0gzYxW0Gh-xe",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "900cd327-9629-4944-87d3-57e104893b6b",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "ZAaubDDAg8Bw781qNZ1gMi5577z1VmNd",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "4a8c1c03-e26b-4ce5-b27d-f8c1dd6dddea",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "g9tteF2JAHodw7mNhhEow_eUr6R8NIBQ",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "16f42337-6e3c-4d69-9c60-8ff62eb5dd34",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "E9f1RL6miYZ5_ZQuAxP_4Zq82GgqS_m0",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "503bee26-1efc-47ef-9074-055037659992",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "5Mxgz3Ho1Ht5qd06kRKbcLg6RrM756TF",
+                token_type: "Contact",
+                companyId: "0db76b8c-b904-479a-ba71-32b973d9e258",
+                contactId: "48ee486f-5c3b-410f-927d-897b35d6e7fd",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "gUQBlP3DFAwnKQsxyGmi4jXc152Q0CaC",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "006196f9-8fed-403f-99a7-8fa70ae6d83a",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "CkxoMe-SOV9qJzasK4HCmSHTIELgD5h7",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "468a4b7a-aff9-49a9-b0b8-3a558731fb1a",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "vBH5OWWlwf7CeErt-czftOgC3hhKar64",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "cdb217a1-00db-4da8-8126-8c294c09fe69",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "Yx2Bnwvtf6oIlbvgt3OplOsv9mo1_ncq",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "eb2975ae-3b43-4d69-a90a-580ab451f727",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "Zy6s9kWgDmsEaLqwbeSSvHGAK8MDnHZ1",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "72282856-206d-4236-a411-1ca5bf273632",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "-KegQqCAmSYoNP3qL6IFzPNqEgHJ_GyP",
+                token_type: "Contact",
+                companyId: "0fe247cd-b512-4d17-b29f-5b438f9b7854",
+                contactId: "5a1a741d-bf93-436c-ab21-f4bfa11fb2e3",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "Kry9wDsBkShm6WDU3_irPb6fI57vYJ3C",
+                token_type: "Contact",
+                companyId: "2d38637a-234b-4702-9f0c-8770d95ec951",
+                contactId: "01ba7708-6978-4ded-935b-7a23acc692b8",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "OxAADtMhWOski4I8OBoexQYA6ZUeanPL",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "4e82290e-5ae1-4cdc-81e9-ef744113304f",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "7eiHdRNvnRvFzd4X91TEzieGz83yHYQF",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "648e7794-484a-4a0b-922c-38fc40d0fcfa",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "ns6e66NF4Wd2zlR5K-b_ps3_7DdKW_jQ",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "6d7d28c9-8721-41b3-a0d3-bee4fa6770df",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "G4e06dEs2hNtVAODZhX_UwqNq9s6nig7",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "9ccef256-e175-44d2-835b-3ffc6e9c9606",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "EBS43FqiARBIakuFaJkjrfLwTzgyN1sq",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "b6e3647b-c0d5-44b9-94c1-fe22746bf58f",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "4vDfs768x1mXU9h452GrL6H3CEWDY7nB",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "8a398cfb-3f25-4f3b-a330-d6210fc9dccd",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "B_nTwr6tpXuoMWzj7znDsasMwvwMUkxI",
+                token_type: "Contact",
+                companyId: "2e5fbcfb-6240-4a76-a839-663313e16ff9",
+                contactId: "112e1cd6-4364-4a69-aced-5f463ff6407e",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "udiPs6p8sluYtZ-FeZyycEDms-4CyQI8",
+                token_type: "Contact",
+                companyId: "2e70c818-55e5-4516-adb5-a184e0fbcef4",
+                contactId: "bd6d6dc6-7982-4037-a2aa-39cc58bf75f9",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "ZhrW-wqPAyQah7fwk2uMoAmadWAhvTXz",
+                token_type: "Contact",
+                companyId: "2e70c818-55e5-4516-adb5-a184e0fbcef4",
+                contactId: "93a2af16-cfa9-4780-b604-5f99fb6840ee",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "5ORmUmygbj3AIXaWpJSsYRR6sWtbmjP6",
+                token_type: "Contact",
+                companyId: "2e70c818-55e5-4516-adb5-a184e0fbcef4",
+                contactId: "215593d0-c45d-497c-b1ce-036c96bae6ea",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "GnzfyIPGB6Xrj1LqJErpqYuEz0Q1fwSX",
+                token_type: "Contact",
+                companyId: "2e81354c-a99e-4bff-a71a-95010c1c5986",
+                contactId: "3ff30e71-32b3-4bcf-8871-a0047f451100",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "sBgCWUgo-YF4JdhemUzzfLUq3japOEdM",
+                token_type: "Contact",
+                companyId: "2efe8eaa-1842-4cb3-9d9e-f911f7209598",
+                contactId: "335f9556-a791-4fe7-8419-915d84db143c",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "lDtMZauu93smfRVGEc8Ena6crQAuzziU",
+                token_type: "Contact",
+                companyId: "3eb95861-4b6a-4bd3-a253-bc54e6a5d038",
+                contactId: "77ad8ce6-152d-436f-af97-4cfad697844f",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "aM07HHzhgmUq1jUbIQm2M9qhg1gtB4bc",
+                token_type: "Contact",
+                companyId: "3eb95861-4b6a-4bd3-a253-bc54e6a5d038",
+                contactId: "3a8b5456-a32c-464c-9e44-e7c6c8fd91e9",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "2DhXiQ-SJOylX3i8IKBfmCIGKRgueG9l",
+                token_type: "Contact",
+                companyId: "49c91bcf-08f5-4561-8790-794c7bd42dc0",
+                contactId: "94f385bf-a57b-4de0-8598-6f2aa1ec8ee8",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "3m2SAJ9L1vGcbIevjYcBPkighzaoX0sL",
+                token_type: "Contact",
+                companyId: "4d292377-65ed-4700-9d54-bba2d0578d9f",
+                contactId: "67ee8c9b-70fd-4f06-aefc-ac6181e5b69c",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "Tv9dbVAnv4KbgRC6KmfPULRKusA1yjy5",
+                token_type: "Contact",
+                companyId: "4d887fb3-51f6-43c7-97ff-bfca9e52ad91",
+                contactId: "f04ce4ff-49dd-49e0-a3f0-5ab9bd544c3a",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "VrAwlPZHU_J1p0nq5SKex7Z6BKfUT57h",
+                token_type: "Contact",
+                companyId: "58b41eb2-31f7-4b10-933d-b400efe414c1",
+                contactId: "d94352e2-7c6c-4e3e-a35d-1a08efd77009",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "t280dQb1c_R866U3SHM2UIi2P-zjiTp2",
+                token_type: "Contact",
+                companyId: "58b41eb2-31f7-4b10-933d-b400efe414c1",
+                contactId: "b8e45d54-9d2b-40b8-b2a0-be75fa6a1511",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "69VZiEqW6h6strRxzGRm5U7K_68cx0Bg",
+                token_type: "Contact",
+                companyId: "63772c23-5818-4973-9328-f7b72d8b79d6",
+                contactId: "c254d480-0fe8-4461-8c4a-cbc584500ae7",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "0TefrWKhdvlBlEng3zS0nZ9ZB8DfsWda",
+                token_type: "Contact",
+                companyId: "6caacec1-5c6c-4cb8-b422-76c2a06eb346",
+                contactId: "57a119a9-a230-4ce2-965e-1825fc4cc28b",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "QHloXABedR3oOoRQ6TQ8bAopreaOcX_n",
+                token_type: "Contact",
+                companyId: "6caacec1-5c6c-4cb8-b422-76c2a06eb346",
+                contactId: "0f842e21-3d3f-4972-b834-0e92e7095ffc",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "xjkfjUHGrRLqxW2i2NThz4WEUlK49aBV",
+                token_type: "Contact",
+                companyId: "70980471-c965-48ee-8927-9dc6ae1cea34",
+                contactId: "4a3e3594-38a1-4114-b6bb-f9464455e9fd",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "_irdt4sKSkwmuUk6L0Sdo-y1n_6Tv2Ah",
+                token_type: "Contact",
+                companyId: "70980471-c965-48ee-8927-9dc6ae1cea34",
+                contactId: "2db5ee2b-672a-454c-a05e-6c9c94c329e7",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "6UtPeT-D9xk7EiR6mdm2VXVHNz3hsTb5",
+                token_type: "Contact",
+                companyId: "715e5349-b0c8-4294-89ac-f04e12a9aed2",
+                contactId: "b4647034-d41d-49eb-b709-8fcd0567187e",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "ifBxGGlQbZmVqQxH92Lu5w7WYmHes1CC",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "05692028-7388-4d93-a8be-d405edc09d80",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "Xu70nQVQzYvKcyxup2EMZIWPIy41apCa",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "acc7bd94-5cb3-45d4-8d24-8ba219ae0cf6",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "_zABtTYeLoIqcZ7-Ft9g6ohB7HlxxCfa",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "2cbd01d0-04f5-4d76-b927-01e73f8395fb",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "eklVafoDOEzdQgI7LgEMYz9iYqoIcDNP",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "338181de-53c3-426c-820d-efddc0289fff",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "2KwLcfA-IM1xw98K6B4p6NgZ6HjMhqIK",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "52cb8d90-ffbf-4181-a27b-1d81988b6807",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "K7ZJtwoRnC3lkGRuAiE1fP1xSbjn7-wb",
+                token_type: "Contact",
+                companyId: "7f417b46-ca0d-4e0c-836c-9a07e16f2f05",
+                contactId: "6956cd58-ff61-48ed-a4da-042f83722b05",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "Cx7W4DlKETwIwy2b5gJM1olDEjIHsdI4",
+                token_type: "Contact",
+                companyId: "80fa105d-9526-4fb2-b6e6-d38abb0ffd47",
+                contactId: "3b465d1b-d6c8-41c1-9177-5c02d107b321",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "xodCGlnpsFv8BneT1pk7U_fe-hbAwqz9",
+                token_type: "Contact",
+                companyId: "85c31843-ea8b-49c0-bc6e-9de8e8e7f583",
+                contactId: "b0a00271-0993-47d9-8377-fe046eb23e53",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "TdI6ShtYGJTs7LiliNNpb6lPoFyImKWO",
+                token_type: "Contact",
+                companyId: "86d34d58-58e6-446a-8f37-090335854f5d",
+                contactId: "953c33cc-9801-4091-9e47-706124e07998",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "45MrWxNqpcccYF6wrKZ_WY8sCu9c4Znd",
+                token_type: "Contact",
+                companyId: "86d34d58-58e6-446a-8f37-090335854f5d",
+                contactId: "a24ba7b7-b572-41e9-adcf-9d4e7d8f8e19",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "J4btRZI-W1XckRr2s76m4JFW5m6qnotu",
+                token_type: "Contact",
+                companyId: "9583c61a-e3ee-4e57-bd79-b3b2eadbf40d",
+                contactId: "edb34f98-69d9-4104-b822-569a5a7fabe0",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "V-v4FLBQUvrrqvtGpsQC51lluFOfdhyb",
+                token_type: "Contact",
+                companyId: "9583c61a-e3ee-4e57-bd79-b3b2eadbf40d",
+                contactId: "75c4417a-9b3e-40b2-8635-015796990cfc",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "74p6nNRcogCbiKhYOhlokHYCFb3aWdG1",
+                token_type: "Contact",
+                companyId: "a2b8833c-80a4-42e4-a239-d9976f237906",
+                contactId: "5bfcae6d-81b4-4744-aee7-a3cc81e6caa8",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "J8HkyTDJyqGdPFr-_w_CTksCm-qHMJlO",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "6c65aaeb-a40f-43e7-bc8c-515021dcc759",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "5HNzyLRU7ADaabgl_b1y_Lqg2kUVzdPA",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "c01cce2b-f3e8-4523-91a2-7466158a9acc",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "JVRJkBQJp7hpuglKSypH8IIaLXQD2h5j",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "50743e83-d18e-4906-8782-1192be257628",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "9njrOLze7fFtKUvWw74FiaXK9mt1QJvA",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "a75fe8be-5f72-474c-bb23-f37396531053",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "J_qQ6S8t4Gnn903mqTeiHZipkunIH7Di",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "50bfda04-aa6f-4874-b62b-e9fab7046cc8",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "V0DDb3_7ChrTicDCcGoOvqsOm_flL916",
+                token_type: "Contact",
+                companyId: "aef0a611-848f-4c59-95f3-58ff9d4e4f68",
+                contactId: "b4a146ba-6246-44bf-bf76-371ee03f7f25",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "j5oXBbQzeqMkgHv2PnobBEws7Yrghr7h",
+                token_type: "Contact",
+                companyId: "b3883ad9-caab-4299-8755-93254104c972",
+                contactId: "3135c9ab-6b43-46fa-9530-6114e58a5285",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "96jAOYv4azoElM6qPq3ZCzVXvB7HsowL",
+                token_type: "Contact",
+                companyId: "b6a7d47d-2de8-4ebd-95f7-7c67fda953b6",
+                contactId: "9877ccdd-84cf-4a91-a821-d8e38a0eb750",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "yfRVdteeenHMo4o9-972x_OsUg6r1siA",
+                token_type: "Contact",
+                companyId: "b8a442a0-76f9-4235-8f7e-6503feca17a5",
+                contactId: "2094421c-fdd3-4345-96ce-f85249f4822b",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "08XnXtcFML3X42gW42NorutUMvhYNKLy",
+                token_type: "Contact",
+                companyId: "b8c16969-cfc5-4e4e-b413-b08c5db492ae",
+                contactId: "6b9f3b07-720c-499a-b14a-17af36bbec54",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "iOpqWJgwVNitBB3Mxq-Hv-AjRIbqa-wk",
+                token_type: "Contact",
+                companyId: "b8c16969-cfc5-4e4e-b413-b08c5db492ae",
+                contactId: "ba1b4238-65ea-4919-8a5a-b9ce5f12e315",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "HDEw9u-8eXF4L9Dg8dc9X_CZVGgWH79X",
+                token_type: "Contact",
+                companyId: "b90d8e52-4d41-493d-a63e-1232d97f6ce6",
+                contactId: "2911f60f-c85d-4266-bedc-4d90c00253f5",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "5hVxJ8KF-09iyoZWv22Tt8FoSjEXv2T8",
+                token_type: "Contact",
+                companyId: "b90d8e52-4d41-493d-a63e-1232d97f6ce6",
+                contactId: "fff65716-013d-419b-9080-281947bbd3c5",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "bEAdv6xWNVbemrr8ORqJAnU9XkW0rZAV",
+                token_type: "Contact",
+                companyId: "b90d8e52-4d41-493d-a63e-1232d97f6ce6",
+                contactId: "f0170c44-10db-4861-bb76-3602c5761622",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "EvdVf3m0srlQz0MexuSna77fBoa4xxIT",
+                token_type: "Contact",
+                companyId: "b90d8e52-4d41-493d-a63e-1232d97f6ce6",
+                contactId: "454db6f9-9268-4102-9574-5619a9289ddb",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "E-mX_X-xj16Wys64vBCQft9zLlhgsKPL",
+                token_type: "Contact",
+                companyId: "cce63b98-d60a-4e86-8603-a485e3a09e74",
+                contactId: "618255dc-debf-412d-9c36-dbba3d68cf1f",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "SyQ_xKZn9rjklIWYIDImzPiVjubbIsj1",
+                token_type: "Contact",
+                companyId: "d42a3509-0346-47fc-924c-a1c2b205fabe",
+                contactId: "2cd9d5e0-dd9c-40d2-ba59-743ac07be14b",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "sPqihCWkDS1p4mp7fMf8Doxzk7blh4WB",
+                token_type: "Contact",
+                companyId: "d74da7c5-73fe-4de0-956b-bada5fef3031",
+                contactId: "a53f2bc8-4a2e-44b1-985a-a032528d35ff",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "hJuyIbNgzCtAeePTk4d4cOLCa2ze1Qzo",
+                token_type: "Contact",
+                companyId: "d74da7c5-73fe-4de0-956b-bada5fef3031",
+                contactId: "39a82b55-af3f-4ade-b490-b64dbfd3e95a",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "P3qW9awADuSewwC6psuE-SNmX4yrCxDH",
+                token_type: "Contact",
+                companyId: "dc01dfe5-d2ce-4906-998b-300a80b64f44",
+                contactId: "7287c2d7-c3e4-48bf-9ce6-b1acedbc2da6",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "f22uv8gcGo-666ao5MWpFUtrgy2ia756",
+                token_type: "Contact",
+                companyId: "dc01dfe5-d2ce-4906-998b-300a80b64f44",
+                contactId: "66b51804-7d17-4a53-a558-dec7285541f0",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "EPuKbFykQna2_ICERiyAPkFPQ32C-Uvz",
+                token_type: "Contact",
+                companyId: "e46a911d-63fc-42a7-a4fd-67a8c1f1cbf0",
+                contactId: "cc57172b-623e-4d8f-b000-ccab391d5b2b",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              },
+              {
+                token: "Bce-LXs5EfbZcmcGtatZ3xJq0ThcUgPA",
+                token_type: "Contact",
+                companyId: "ea90d87f-24f2-451f-86c0-545aa5700f8d",
+                contactId: "d84f583b-4829-49a2-991e-b7863431cfe9",
+                batchId: "4025d575-7cdb-46e3-ba9e-182ca457f211"
+              }
+            ]
+          })
+
+Argument `tokenHash` is missing.
+    at lr (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:10:1379)
+    at zr.handleRequestError (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:65:7929)
+    at zr.handleAndLogRequestError (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:65:7581)
+    at zr.request (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:65:7288)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async a (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:75:5816)
+    at async C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\[root-of-the-server]__9ede0f2a._.js:235:32
+    at async Proxy._transactionWithCallback (C:\Users\User\Antigravity\MGS survey\node_modules\@prisma\client\runtime\client.js:75:4390)
+    at async POST (C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\[root-of-the-server]__9ede0f2a._.js:227:13)
+    at async AppRouteRouteModule.do (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:37866)
+    at async AppRouteRouteModule.handle (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:45156)
+    at async responseGenerator (C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\node_modules_next_294ee2f9._.js:15350:38)
+    at async AppRouteRouteModule.handleResponse (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:1:191938)
+    at async handleResponse (C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\node_modules_next_294ee2f9._.js:15413:32)
+    at async Module.handler (C:\Users\User\Antigravity\MGS survey\.next\dev\server\chunks\node_modules_next_294ee2f9._.js:15466:13)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:1442:9)
+    at async DevServer.renderPageComponent (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:1494:24)
+    at async DevServer.renderToResponseImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:1544:32)
+    at async DevServer.pipeImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:1038:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\next-server.js:395:17)
+    at async DevServer.handleRequestImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\base-server.js:929:17)
+    at async C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\dev\next-dev-server.js:387:20
+    at async Span.traceAsyncFn (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\trace\trace.js:157:20)
+    at async DevServer.handleRequest (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\dev\next-dev-server.js:383:24)
+    at async invokeRender (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\lib\router-server.js:248:21)
+    at async handleRequest (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\lib\router-server.js:447:24)
+    at async requestHandlerImpl (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\lib\router-server.js:496:13)
+    at async Server.requestListener (C:\Users\User\Antigravity\MGS survey\node_modules\next\dist\server\lib\start-server.js:226:13)
