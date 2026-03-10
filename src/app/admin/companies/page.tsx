@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { Building2, Search } from 'lucide-react';
+import { Building2, Search, Trash2 } from 'lucide-react';
 
 type Company = {
     id: string;
@@ -16,14 +16,35 @@ export default function CompaniesPage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
 
-    useEffect(() => {
+    const loadCompanies = () => {
         fetch('/api/admin/companies')
             .then(res => res.json())
             .then(data => {
                 setCompanies(data);
                 setLoading(false);
             });
+    };
+
+    useEffect(() => {
+        loadCompanies();
     }, []);
+
+    const handleDelete = async (id: string, name: string) => {
+        if (!window.confirm(`Are you sure you want to delete "${name}"? This action cannot be undone and will delete all associated contacts and feedback items for this company.`)) return;
+
+        try {
+            const res = await fetch(`/api/admin/companies/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                setLoading(true);
+                loadCompanies();
+            } else {
+                alert('Failed to delete company.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error deleting company.');
+        }
+    };
 
     const filtered = companies.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
 
@@ -76,8 +97,11 @@ export default function CompaniesPage() {
                                             <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-semibold">{company._count.contacts}</span>
                                         </td>
                                         <td className="py-4 px-4 text-secondary">{company._count.projectInvites}</td>
-                                        <td className="py-4 px-4">
+                                        <td className="py-4 px-4 flex items-center gap-3">
                                             <button className="text-sm text-accent hover:underline">View details</button>
+                                            <button onClick={() => handleDelete(company.id, company.name)} className="text-danger hover:text-danger/70 transition-colors p-1" title="Delete Company">
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}

@@ -93,10 +93,12 @@ export default function ImportPage() {
 
                 <div className="glass-card flex flex-col justify-center">
                     <h3 className="text-lg font-bold mb-4 border-b border-surface-border pb-2">Required CSV Columns</h3>
+                    <p className="text-sm text-secondary mb-4">
+                        The exact column headings matter, but the order of the columns does not. <strong className="text-foreground border-b border-danger">All fields below are mandatory</strong>.
+                    </p>
                     <ul className="space-y-3 text-sm text-secondary">
-                        <li><strong className="text-foreground">CompanyName</strong> <span className="text-danger">*</span></li>
-                        <li><strong className="text-foreground">ProjectID</strong> <span className="text-danger">*</span> (Unique tracker)</li>
-                        <li><strong className="text-foreground">ProjectName</strong> <span className="text-danger">*</span></li>
+                        <li><strong className="text-foreground">CompanyName</strong></li>
+                        <li><strong className="text-foreground">ProjectName</strong> (Unique Tracking ID is auto-generated)</li>
                         <li><strong className="text-foreground">ContactName</strong></li>
                         <li><strong className="text-foreground">ContactEmail</strong></li>
                         <li><strong className="text-foreground">InvitedDate</strong> (YYYY-MM-DD format)</li>

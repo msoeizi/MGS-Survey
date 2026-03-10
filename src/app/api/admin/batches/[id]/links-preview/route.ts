@@ -25,11 +25,14 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
 
         // Map safe visual projection for Admin Display
         const previewData = tokens.map((t: any) => ({
+            id: t.id,
             companyName: t.company?.name || 'Unknown',
             contactName: t.contact?.name || 'Company-Wide Link',
             contactEmail: t.contact?.email || 'N/A',
             token: t.token, // Display actual string link for clicking
-            created_at: t.created_at
+            created_at: t.created_at,
+            email_sent_at: t.email_sent_at,
+            email_opened_at: t.email_opened_at
         }));
 
         return NextResponse.json(previewData);

@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { Layers, Plus, Calendar } from 'lucide-react';
+import { Layers, Plus, Calendar, Trash2 } from 'lucide-react';
 
 type Batch = {
     id: string;
@@ -44,6 +44,23 @@ export default function BatchesPage() {
         setCreating(false);
         setLoading(true);
         loadBatches();
+    };
+
+    const handleDelete = async (id: string, name: string) => {
+        if (!window.confirm(`Are you sure you want to delete the batch "${name}"? This action cannot be undone and will delete all associated feedback items.`)) return;
+
+        try {
+            const res = await fetch(`/api/admin/batches/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                setLoading(true);
+                loadBatches();
+            } else {
+                alert('Failed to delete batch.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error deleting batch.');
+        }
     };
 
     return (
@@ -109,8 +126,11 @@ export default function BatchesPage() {
                                             <td className="py-4 px-4 text-secondary text-sm flex items-center gap-1 mt-1">
                                                 <Calendar className="w-4 h-4" /> {new Date(batch.createdAt).toLocaleDateString()}
                                             </td>
-                                            <td className="py-4 px-4">
+                                            <td className="py-4 px-4 flex items-center gap-3">
                                                 <a href={`/admin/batches/${batch.id}`} className="text-sm text-primary hover:underline font-medium">Manage Links & Data</a>
+                                                <button onClick={() => handleDelete(batch.id, batch.name)} className="text-danger hover:text-danger/70 transition-colors p-1" title="Delete Batch">
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}

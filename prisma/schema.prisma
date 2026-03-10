@@ -75,6 +75,7 @@ model Batch {
   updatedAt       DateTime          @updatedAt
   feedbackItems   FeedbackItem[]
   generalFeedback GeneralFeedback[]
+  emailCampaigns  EmailCampaign[]
 }
 
 model FeedbackItem {
@@ -122,18 +123,53 @@ model GeneralFeedback {
 }
 
 model AccessToken {
-  id           String    @id @default(uuid())
-  token        String    @unique
-  token_type   String    // Company, Contact
-  companyId    String
-  contactId    String?
-  batchId      String?
-  expires_at   DateTime?
-  revoked_at   DateTime?
-  created_at   DateTime  @default(now())
-  last_used_at DateTime?
+  id              String    @id @default(uuid())
+  token           String    @unique
+  token_type      String    // Company, Contact
+  companyId       String
+  contactId       String?
+  batchId         String?
+  expires_at      DateTime?
+  revoked_at      DateTime?
+  created_at      DateTime  @default(now())
+  last_used_at    DateTime?
+  
+  // These are now superseded by EmailDelivery, but we can leave them for backward compatibility or remove later
+  email_sent_at   DateTime?
+  email_opened_at DateTime?
 
   // Re-adding correct explicit relations to fix cascade errors during db push
   company Company  @relation(fields: [companyId], references: [id], onDelete: NoAction)
   contact Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  deliveries      EmailDelivery[]
+}
+
+model EmailCampaign {
+  id            String    @id @default(uuid())
+  batchId       String
+  name          String    // Internal reference name e.g "Follow up 1"
+  subject       String
+  htmlBody      String
+  status        String    @default("Draft") // Draft, Scheduled, Sent
+  scheduled_for DateTime?
+  sent_at       DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  batch         Batch           @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  deliveries    EmailDelivery[]
+}
+
+model EmailDelivery {
+  id            String    @id @default(uuid())
+  campaignId    String
+  tokenId       String
+  status        String    @default("Pending") // Pending, Sent, Failed
+  sent_at       DateTime?
+  opened_at     DateTime?
+  
+  campaign      EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  token         AccessToken   @relation(fields: [tokenId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, tokenId]) // A token should only receive a specific campaign once
 }

@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { FolderKanban, Search } from 'lucide-react';
+import { FolderKanban, Search, Trash2 } from 'lucide-react';
 
 type Project = {
     id: string;
@@ -16,14 +16,35 @@ export default function ProjectsPage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
 
-    useEffect(() => {
+    const loadProjects = () => {
         fetch('/api/admin/projects')
             .then(res => res.json())
             .then(data => {
                 setProjects(data);
                 setLoading(false);
             });
+    };
+
+    useEffect(() => {
+        loadProjects();
     }, []);
+
+    const handleDelete = async (id: string, name: string) => {
+        if (!window.confirm(`Are you sure you want to delete the project "${name}"? This action cannot be undone and will delete all associated feedback items.`)) return;
+
+        try {
+            const res = await fetch(`/api/admin/projects/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                setLoading(true);
+                loadProjects();
+            } else {
+                alert('Failed to delete project.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error deleting project.');
+        }
+    };
 
     const filtered = projects.filter(p => p.project_name.toLowerCase().includes(search.toLowerCase()) || p.project_unique_id.toLowerCase().includes(search.toLowerCase()));
 
@@ -76,8 +97,11 @@ export default function ProjectsPage() {
                                             <span className="bg-secondary/30 text-secondary px-2 py-1 rounded text-sm font-semibold">{proj._count.companyInvites}</span>
                                         </td>
                                         <td className="py-4 px-4 text-secondary text-sm">{new Date(proj.createdAt).toLocaleDateString()}</td>
-                                        <td className="py-4 px-4">
+                                        <td className="py-4 px-4 flex items-center gap-3">
                                             <button className="text-sm text-accent hover:underline">View details</button>
+                                            <button onClick={() => handleDelete(proj.id, proj.project_name)} className="text-danger hover:text-danger/70 transition-colors p-1" title="Delete Project">
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}

@@ -6,13 +6,11 @@ export const dynamic = 'force-dynamic';
 
 const importRowSchema = z.object({
     CompanyName: z.string().min(1, "Company Name required"),
-    ContactName: z.string().optional().or(z.literal('')),
-    ContactEmail: z.string().email("Invalid email").optional().or(z.literal('')),
-    ProjectID: z.string().min(1, "Project ID required"),
+    ContactName: z.string().min(1, "Contact Name required"),
+    ContactEmail: z.string().email("Invalid email format"),
     ProjectName: z.string().min(1, "Project Name required"),
-    InvitedDate: z.string().optional().or(z.literal('')),
-    // Coerce to number if present, otherwise ignore empty string
-    SubmittedPrice: z.union([z.coerce.number(), z.literal('')]).optional().transform(val => val === '' ? undefined : val),
+    InvitedDate: z.string().min(1, "Invited Date required"),
+    SubmittedPrice: z.coerce.number(),
 });
 
 export async function POST(request: Request) {
@@ -34,7 +32,6 @@ export async function POST(request: Request) {
                 const row = { ...rawRow };
                 const companyName = row.CompanyName || row['Company Name'] || row['GC Name'] || row.Company || '';
                 const projectName = row.ProjectName || row['Project Name'] || row.Project || '';
-                const projectID = row.ProjectID || row['Project ID'] || (projectName ? projectName.toLowerCase().replace(/[^a-z0-9]/g, '-') : '');
                 const contactName = row.ContactName || row['Contact Name'] || row['Contact Person'] || row.Contact || row['Invited By'] || row['invited by'] || '';
                 const contactEmail = row.ContactEmail || row['Contact Email'] || row['contact email'] || row.Email || '';
 
@@ -56,7 +53,6 @@ export async function POST(request: Request) {
                 const mappedData = {
                     CompanyName: companyName,
                     ProjectName: projectName,
-                    ProjectID: projectID,
                     ContactName: contactName,
                     ContactEmail: contactEmail,
                     InvitedDate: invitedDate,
@@ -103,15 +99,20 @@ export async function POST(request: Request) {
                 });
                 contactId = contact.id;
 
-                // 3. Upsert Project
-                const project = await prisma.project.upsert({
-                    where: { project_unique_id: parsed.ProjectID },
-                    update: { project_name: parsed.ProjectName },
-                    create: {
-                        project_unique_id: parsed.ProjectID,
-                        project_name: parsed.ProjectName,
-                    }
+                // 3. Upsert Project by Name, auto-generate ID if needed
+                let project = await prisma.project.findFirst({
+                    where: { project_name: parsed.ProjectName }
                 });
+
+                if (!project) {
+                    const uniqueId = `PRJ-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+                    project = await prisma.project.create({
+                        data: {
+                            project_unique_id: uniqueId,
+                            project_name: parsed.ProjectName,
+                        }
+                    });
+                }
 
                 // 4. Create or Update CompanyProjectInvite
                 await prisma.companyProjectInvite.upsert({
