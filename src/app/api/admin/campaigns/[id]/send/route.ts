@@ -4,13 +4,12 @@ import { Resend } from 'resend';
 
 export const dynamic = 'force-dynamic';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
         const campaignId = (await params).id;
         const { tokenIds } = await request.json();
 
