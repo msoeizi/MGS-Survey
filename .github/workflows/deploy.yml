@@ -18,10 +18,13 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd ~/mgs-survey
             git pull origin main
             npm install
             npx prisma generate
             npm run build
-            pm2 restart survey-app || pm2 start npm --name "survey-app" -- start
+            # PM2 deployment - restart if exists, otherwise start
+            pm2 delete survey-app || true
+            pm2 start npm --name "survey-app" -- start
