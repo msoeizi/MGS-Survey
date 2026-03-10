@@ -31,7 +31,7 @@ export async function GET(
         }
 
         // Flatten the delivery data for the UI
-        const flattenedDeliveries = campaign.deliveries.map(d => ({
+        const flattenedDeliveries = campaign.deliveries.map((d: any) => ({
             deliveryId: d.id,
             tokenId: d.tokenId,
             companyName: d.token.company?.name || 'Unknown',
