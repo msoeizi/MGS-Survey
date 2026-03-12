@@ -159,10 +159,13 @@ export async function POST(
         });
 
     } catch (error: any) {
-        console.error('Error sending campaign:', error);
+        console.error('FATAL Error sending campaign:', error);
+        if (error instanceof Error) {
+            console.error('Stack Trace:', error.stack);
+        }
         return NextResponse.json({
             error: 'Internal Server Error',
-            details: error.message
+            details: error?.message || String(error)
         }, { status: 500 });
     }
 }

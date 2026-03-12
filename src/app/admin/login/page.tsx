@@ -37,7 +37,8 @@ export default function AdminLogin() {
     return (
         <div className="flex items-center justify-center min-h-screen p-4">
             <div className="glass-panel p-8 w-full max-w-md animate-fade-in shadow-xl">
-                <div className="text-center mb-8">
+                <div className="text-center mb-8 flex flex-col items-center">
+                    <img src="/Images/Logo.png" alt="MGS Logo" className="w-32 mb-4 opacity-90" />
                     <h1 className="text-3xl font-bold mb-2">Admin Portal</h1>
                     <p className="text-secondary">Please sign in to continue</p>
                 </div>
