@@ -68,6 +68,12 @@ export default function AdminLogin() {
                         {loading ? 'Authenticating...' : 'Sign In'}
                     </button>
                 </form>
+
+                <div className="mt-8 text-center">
+                    <p className="text-[10px] text-gray-500 uppercase tracking-widest">
+                        MGS Survey v1.0.1 • Production
+                    </p>
+                </div>
             </div>
         </div>
     );

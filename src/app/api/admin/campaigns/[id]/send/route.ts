@@ -9,6 +9,9 @@ export async function POST(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        if (!process.env.RESEND_API_KEY) {
+            console.error('[SendRoute] RESEND_API_KEY is not set!');
+        }
         const resend = new Resend(process.env.RESEND_API_KEY);
         const campaignId = (await params).id;
         const { tokenIds } = await request.json();
@@ -100,8 +103,9 @@ export async function POST(
 
             try {
                 // Dispatch via Resend
+                const fromAddress = process.env.RESEND_FROM_EMAIL || 'MGS Survey <info@moderngrains.com>';
                 const { data, error } = await resend.emails.send({
-                    from: 'MGS Survey <onboarding@resend.dev>',
+                    from: fromAddress,
                     to: t.contact.email,
                     subject: parsedSubject,
                     html: finalHtml,
