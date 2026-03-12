@@ -1,10 +1,19 @@
+"use client"
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function AdminLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const pathname = usePathname();
+    const isLogin = pathname === '/admin/login';
+
+    if (isLogin) {
+        return <>{children}</>;
+    }
+
     return (
         <div className="min-h-screen flex">
             {/* Sidebar Navigation */}
