@@ -30,19 +30,19 @@ export default async function SurveyLandingPage(props: {
             <div className="glass-panel p-8 md:p-12 text-center shadow-xl max-w-2xl mx-auto mt-12">
                 <h1 className="text-4xl font-bold tracking-tight mb-4">Hello, {contactName}</h1>
                 <p className="text-xl text-secondary mb-8 leading-relaxed">
-                    Welcome to the feedback portal for <strong className="text-primary">{company?.name}</strong>.
+                    We truly appreciate you taking the time to provide feedback on your experience with <strong className="text-primary">{company?.name}</strong>.
                 </p>
 
-                <div className="bg-surface p-6 rounded-lg text-left mb-8 border border-surface-border inline-block w-full">
+                <div className="bg-surface p-6 rounded-lg text-left mb-8 border border-surface-border w-full">
                     <h3 className="font-semibold text-lg text-primary mb-2">Campaign: {batch?.name}</h3>
                     <p className="text-secondary mb-4">
-                        You have been invited to provide feedback on your recent tendered projects.
-                        This information helps us understand the market and improve future collaborations.
+                        Your insights are invaluable in helping us understand the market and improve our future collaborations. 
+                        Please help us by reviewing the projects below.
                     </p>
-                    <ul className="list-disc pl-5 text-sm text-secondary space-y-2">
-                        <li>Please review your invited projects and select the ones you want to provide feedback on.</li>
-                        <li>You can save your progress and return later using the same link.</li>
-                        <li>Once submitted, your responses will be sent directly to our team.</li>
+                    <ul className="list-disc pl-6 text-sm text-secondary space-y-2 text-left">
+                        <li>Please select the projects you wish to provide feedback on.</li>
+                        <li>Your progress is automatically saved, so you can return at any time.</li>
+                        <li>Once submitted, your feedback will be shared directly with our team.</li>
                     </ul>
                 </div>
 

@@ -22,11 +22,13 @@ function useDebounceCallback<Args extends any[]>(
 
 export default function FeedbackFormClient({
     items,
+    initialGeneral,
     token,
     batchId,
     currentContactId
 }: {
     items: any[],
+    initialGeneral?: any,
     token: string,
     batchId: string,
     currentContactId: string
@@ -50,8 +52,8 @@ export default function FeedbackFormClient({
 
     // General feedback data
     const [generalData, setGeneralData] = useState({
-        relationship_feedback: '',
-        follow_up_impact: ''
+        relationship_feedback: initialGeneral?.relationship_feedback || '',
+        follow_up_impact: initialGeneral?.follow_up_impact || ''
     });
 
     const [savingState, setSavingState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
@@ -192,7 +194,7 @@ export default function FeedbackFormClient({
                                 <div className="mt-4">
                                     <button
                                         onClick={() => toggleDetails(item.id)}
-                                        className="text-primary hover:text-primary-hover flex items-center gap-1 font-semibold transition-colors"
+                                        className="text-primary hover:text-primary-hover flex items-center gap-1 font-semibold transition-colors bg-transparent border-none p-0 shadow-none outline-none focus:outline-none"
                                     >
                                         Details {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                                     </button>
@@ -343,7 +345,7 @@ export default function FeedbackFormClient({
                                         <div className="mt-4">
                                             <button
                                                 onClick={() => toggleDetails(item.id)}
-                                                className="text-secondary hover:text-foreground flex items-center gap-1 font-semibold transition-colors"
+                                                className="text-secondary hover:text-foreground flex items-center gap-1 font-semibold transition-colors bg-transparent border-none p-0 shadow-none outline-none focus:outline-none"
                                             >
                                                 Details {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                                             </button>

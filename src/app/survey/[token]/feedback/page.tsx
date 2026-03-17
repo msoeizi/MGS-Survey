@@ -39,9 +39,20 @@ export default async function FeedbackPage(props: {
         redirect(`/survey/${params.token}/projects?batch=${batchId}`);
     }
 
+    const generalFeedback = await prisma.generalFeedback.findUnique({
+        where: {
+            batchId_companyId_contactId: {
+                batchId: batchId,
+                companyId: tokenRecord.companyId,
+                contactId: tokenRecord.contactId as string
+            }
+        }
+    });
+
     return (
         <FeedbackFormClient
             items={feedbackItems}
+            initialGeneral={generalFeedback}
             token={params.token}
             batchId={batchId}
             currentContactId={tokenRecord.contactId as string}
