@@ -66,20 +66,28 @@ export async function POST(
             const surveyLink = `${appUrl}/survey/${t.token}?batch=${campaign.batchId}`;
 
             // Create Pending delivery record
-            const delivery = await prisma.emailDelivery.upsert({
-                where: {
-                    campaignId_tokenId: {
+            let delivery;
+            try {
+                console.log(`[SendRoute] Upserting delivery for token ${t.id}...`);
+                delivery = await prisma.emailDelivery.upsert({
+                    where: {
+                        campaignId_tokenId: {
+                            campaignId: campaign.id,
+                            tokenId: t.id
+                        }
+                    },
+                    update: { status: 'Pending' },
+                    create: {
                         campaignId: campaign.id,
-                        tokenId: t.id
+                        tokenId: t.id,
+                        status: 'Pending'
                     }
-                },
-                update: { status: 'Pending' },
-                create: {
-                    campaignId: campaign.id,
-                    tokenId: t.id,
-                    status: 'Pending'
-                }
-            });
+                });
+                console.log(`[SendRoute] Upsert completed for delivery ${delivery.id}`);
+            } catch (upsertError: any) {
+                console.error('[SendRoute] Upsert failed:', upsertError);
+                throw new Error(`Database Upsert Failed: ${upsertError.message || upsertError}`);
+            }
 
             if (isScheduled) {
                 // Skip actual sending if scheduled for later
@@ -103,6 +111,7 @@ export async function POST(
 
             try {
                 // Dispatch via Resend
+                console.log(`[SendRoute] Dispatching email to ${t.contact.email} via Resend...`);
                 const fromAddress = process.env.RESEND_FROM_EMAIL || 'MGS Survey <info@moderngrains.com>';
                 const { data, error } = await resend.emails.send({
                     from: fromAddress,
@@ -114,6 +123,7 @@ export async function POST(
                 if (error) {
                     console.error(`[Resend Error] Sending to ${t.contact.email}:`, error);
                     lastError = error.message;
+                    console.log(`[SendRoute] Updating delivery ${delivery.id} to Failed...`);
                     await prisma.emailDelivery.update({
                         where: { id: delivery.id },
                         data: { status: 'Failed' }
@@ -121,6 +131,7 @@ export async function POST(
                 } else {
                     successCount++;
                     // Mark delivery as sent
+                    console.log(`[SendRoute] Updating delivery ${delivery.id} to Sent...`);
                     await prisma.emailDelivery.update({
                         where: { id: delivery.id },
                         data: { status: 'Sent', sent_at: new Date() }
@@ -137,6 +148,7 @@ export async function POST(
         }
 
         // Mark the overall campaign status
+        console.log(`[SendRoute] Finalizing campaign ${campaign.id} status...`);
         await prisma.emailCampaign.update({
             where: { id: campaign.id },
             data: {
@@ -144,6 +156,7 @@ export async function POST(
                 sent_at: isScheduled ? null : new Date()
             }
         });
+        console.log(`[SendRoute] Campaign ${campaign.id} marked as Sent.`);
 
         if (successCount === 0 && tokens.length > 0 && !isScheduled) {
             return NextResponse.json({
@@ -159,6 +172,11 @@ export async function POST(
         });
 
     } catch (error: any) {
+        // Log to a permanent file for debugging
+        const fs = require('fs');
+        const logMsg = `\n[${new Date().toISOString()}] FATAL Error: ${error?.message || error}\nStack: ${error?.stack}\n`;
+        fs.appendFileSync('fatal_route_error.log', logMsg);
+        
         console.error('FATAL Error sending campaign:', error);
         if (error instanceof Error) {
             console.error('Stack Trace:', error.stack);

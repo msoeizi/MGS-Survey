@@ -356,7 +356,8 @@ export default function BatchDetailsPage() {
                 loadCampaigns(); // Refresh list to show "Sent" status
                 setActiveCampaign(null); // Return to list
             } else {
-                alert(`Failed: ${data.error}`);
+                const errorMsg = data.details ? `${data.error}: ${data.details}` : (data.error || 'Unknown error');
+                alert(`Failed: ${errorMsg}`);
             }
         } catch (e) {
             console.error(e);
