@@ -23,6 +23,13 @@ jobs:
           script: |
             cd ~/mgs-survey
             git pull origin main
+            
+            # Inject environment variables into .env
+            echo "DATABASE_URL=\"file:./dev.db\"" > .env
+            echo "RESEND_API_KEY=\"${{ secrets.RESEND_API_KEY }}\"" >> .env
+            echo "NEXT_PUBLIC_APP_URL=\"${{ secrets.NEXT_PUBLIC_APP_URL }}\"" >> .env
+            echo "AUTH_SECRET=\"${{ secrets.AUTH_SECRET }}\"" >> .env
+            
             npm install --production=false
             npx prisma generate
             npm run build
