@@ -800,6 +800,31 @@ textarea:focus {
 .hover\:bg-surface\/70:hover {
   background-color: rgba(255, 255, 255, 0.7);
 }
+ 
+.bg-transparent {
+  background-color: transparent !important;
+}
+ 
+.border-none {
+  border: none !important;
+}
+ 
+.p-0 {
+  padding: 0 !important;
+}
+ 
+.shadow-none {
+  box-shadow: none !important;
+}
+ 
+.outline-none {
+  outline: none !important;
+}
+ 
+.focus\:outline-none:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
 
 .hover\:text-primary:hover {
   color: var(--primary);
