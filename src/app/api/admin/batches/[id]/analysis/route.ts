@@ -63,7 +63,21 @@ export async function GET(
             take: 5
         });
 
-        // 4. Recent Activity (Latest 5 submissions)
+        // 4. Quote Reasonableness Stats
+        const quoteStats = await prisma.feedbackItem.groupBy({
+            by: ['quote_reasonableness'],
+            where: { batchId, status: 'Submitted', NOT: { quote_reasonableness: null } },
+            _count: true
+        });
+
+        // 5. Follow-up Impact Stats (from GeneralFeedback)
+        const impactStats = await prisma.generalFeedback.groupBy({
+            by: ['follow_up_impact'],
+            where: { batchId, NOT: { follow_up_impact: null } },
+            _count: true
+        });
+
+        // 6. Recent Activity (Latest 5 submissions)
         const recentActivity = await prisma.feedbackItem.findMany({
             where: { batchId, status: 'Submitted' },
             orderBy: { submitted_at: 'desc' },
@@ -81,6 +95,14 @@ export async function GET(
             reasons: reasonStats.map(r => ({
                 reason: r.reason_not_carried,
                 count: r._count.reason_not_carried
+            })),
+            sentiment: quoteStats.map(q => ({
+                label: q.quote_reasonableness,
+                count: q._count
+            })),
+            impact: impactStats.map(i => ({
+                label: i.follow_up_impact,
+                count: i._count
             })),
             recentActivity: recentActivity.map(a => ({
                 id: a.id,

@@ -568,6 +568,35 @@ export default function BatchDetailsPage() {
                                 </div>
                             </div>
  
+                            {/* Sentiment & Impact */}
+                            <div className="flex flex-col gap-6">
+                                <div className="glass-panel p-6 flex-1">
+                                    <h3 className="text-sm font-bold mb-4 uppercase text-secondary">Quote Sentiment</h3>
+                                    <div className="space-y-3">
+                                        {analysis.sentiment?.map((s: any, i: number) => (
+                                            <div key={i} className="flex justify-between items-center text-xs">
+                                                <span className="text-secondary">{s.label}</span>
+                                                <span className="font-bold text-primary">{s.count}</span>
+                                            </div>
+                                        ))}
+                                        {(!analysis.sentiment || analysis.sentiment.length === 0) && <div className="text-xs text-secondary italic">No sentiment data yet.</div>}
+                                    </div>
+                                </div>
+
+                                <div className="glass-panel p-6 flex-1 bg-primary/5">
+                                    <h3 className="text-sm font-bold mb-4 uppercase text-primary">Follow-up Impact</h3>
+                                    <div className="space-y-3">
+                                        {analysis.impact?.map((imp: any, i: number) => (
+                                            <div key={i} className="flex justify-between items-center text-xs">
+                                                <span className="text-secondary">{imp.label}</span>
+                                                <span className={`font-bold ${imp.label === 'High' ? 'text-success' : 'text-primary'}`}>{imp.count}</span>
+                                            </div>
+                                        ))}
+                                        {(!analysis.impact || analysis.impact.length === 0) && <div className="text-xs text-secondary italic">No impact recorded yet.</div>}
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Win/Loss & Reasons */}
                             <div className="flex flex-col gap-6">
                                 <div className="glass-panel p-6 flex-1">
@@ -604,6 +633,35 @@ export default function BatchDetailsPage() {
                                             </div>
                                         ))}
                                         {analysis.reasons.length === 0 && <div className="text-xs text-secondary italic">No loss reasons recorded yet.</div>}
+                                    </div>
+                                </div>
+                            </div>
+ 
+                            {/* Sentiment & Impact */}
+                            <div className="flex flex-col gap-6">
+                                <div className="glass-panel p-6 flex-1">
+                                    <h3 className="text-sm font-bold mb-4 uppercase text-secondary">Quote Sentiment</h3>
+                                    <div className="space-y-3">
+                                        {analysis.sentiment?.map((s: any, i: number) => (
+                                            <div key={i} className="flex justify-between items-center text-xs">
+                                                <span className="text-secondary">{s.label}</span>
+                                                <span className="font-bold text-primary">{s.count}</span>
+                                            </div>
+                                        ))}
+                                        {(!analysis.sentiment || analysis.sentiment.length === 0) && <div className="text-xs text-secondary italic">No sentiment data yet.</div>}
+                                    </div>
+                                </div>
+
+                                <div className="glass-panel p-6 flex-1 bg-primary/5">
+                                    <h3 className="text-sm font-bold mb-4 uppercase text-primary">Follow-up Impact</h3>
+                                    <div className="space-y-3">
+                                        {analysis.impact?.map((imp: any, i: number) => (
+                                            <div key={i} className="flex justify-between items-center text-xs">
+                                                <span className="text-secondary">{imp.label}</span>
+                                                <span className={`font-bold ${imp.label === 'High' ? 'text-success' : 'text-primary'}`}>{imp.count}</span>
+                                            </div>
+                                        ))}
+                                        {(!analysis.impact || analysis.impact.length === 0) && <div className="text-xs text-secondary italic">No impact recorded yet.</div>}
                                     </div>
                                 </div>
                             </div>
@@ -849,7 +907,21 @@ export default function BatchDetailsPage() {
                                                 <tr key={i} className={`border-b border-surface-border/50 transition-colors ${!isSentCampaign ? 'cursor-pointer hover:bg-surface/80' : ''} ${selectedTokenIds.includes(link.id) ? 'bg-primary/10' : ''}`} onClick={() => !isSentCampaign && toggleTokenSelection(link.id)}>
                                                     {!isSentCampaign && (
                                                         <td className="py-3 px-3 text-center">
-                                                            {selectedTokenIds.includes(link.id) ? <CheckCircle2 className="w-5 h-5 text-primary" /> : <Circle className="w-5 h-5 text-surface-border hover:text-secondary" />}
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                <button 
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        const url = `${window.location.protocol}//${window.location.host}/survey/${link.token}`;
+                                                                        navigator.clipboard.writeText(url);
+                                                                        alert('Survey link copied to clipboard!');
+                                                                    }}
+                                                                    className="p-1 hover:bg-primary/10 rounded text-primary transition-colors inline-flex"
+                                                                    title="Copy Survey Link"
+                                                                >
+                                                                    <Copy className="w-3 h-3" />
+                                                                </button>
+                                                                {selectedTokenIds.includes(link.id) ? <CheckCircle2 className="w-4 h-4 text-primary" /> : <Circle className="w-4 h-4 text-surface-border hover:text-secondary" />}
+                                                            </div>
                                                         </td>
                                                     )}
                                                     <td className="py-3 px-3">
