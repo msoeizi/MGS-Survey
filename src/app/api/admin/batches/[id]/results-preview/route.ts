@@ -23,8 +23,17 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
             }
         });
 
-        // Map safe visual projection for Admin Display
-        const previewData = feedback.map((f: any) => ({
+        // Fetch general feedback for this batch
+        const generalFeedback = await prisma.generalFeedback.findMany({
+            where: { batchId },
+            include: {
+                company: { select: { name: true } },
+                contact: { select: { name: true, email: true } }
+            },
+            orderBy: { updatedAt: 'desc' }
+        });
+
+        const projectFeedback = feedback.map((f: any) => ({
             id: f.id,
             companyName: f.company?.name || 'Unknown',
             contactName: f.contact?.name || 'Unknown',
@@ -40,7 +49,17 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
             submitted_at: f.submitted_at
         }));
 
-        return NextResponse.json(previewData);
+        return NextResponse.json({
+            projectFeedback,
+            generalFeedback: generalFeedback.map(g => ({
+                id: g.id,
+                companyName: g.company?.name || 'Unknown',
+                contactName: g.contact?.name || 'Unknown',
+                relationship_feedback: g.relationship_feedback,
+                follow_up_impact: g.follow_up_impact,
+                updatedAt: g.updatedAt
+            }))
+        });
     } catch (error) {
         console.error("Results Preview Error: ", error);
         return NextResponse.json({ error: 'Failed to load preview results' }, { status: 500 });

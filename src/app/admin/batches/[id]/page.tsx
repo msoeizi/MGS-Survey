@@ -24,7 +24,9 @@ export default function BatchDetailsPage() {
 
     // New state for live results preview directly on page
     const [results, setResults] = useState<any[]>([]);
+    const [generalResults, setGeneralResults] = useState<any[]>([]);
     const [loadingResults, setLoadingResults] = useState(false);
+    const [feedbackView, setFeedbackView] = useState<'projects' | 'general'>('projects');
  
     // New state for Analysis Dashboard
     const [analysis, setAnalysis] = useState<any>(null);
@@ -155,7 +157,8 @@ export default function BatchDetailsPage() {
             const res = await fetch(`/api/admin/batches/${params.id}/results-preview`);
             if (res.ok) {
                 const data = await res.json();
-                setResults(data);
+                setResults(data.projectFeedback || []);
+                setGeneralResults(data.generalFeedback || []);
             }
         } catch (e) {
             console.error("Failed to load results preview");
@@ -888,8 +891,21 @@ export default function BatchDetailsPage() {
                 <div className="glass-panel p-6 mt-8 animate-fade-in-up">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <div>
-                            <h3 className="text-lg font-bold">Feedback Item Tracking</h3>
-                            <p className="text-secondary text-sm">Review incoming survey data directly from the dashboard.</p>
+                            <h3 className="text-lg font-bold">Feedback Tracking</h3>
+                            <div className="flex gap-4 mt-2">
+                                <button 
+                                    onClick={() => setFeedbackView('projects')}
+                                    className={`text-sm font-bold pb-1 border-b-2 transition-all ${feedbackView === 'projects' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-foreground'}`}
+                                >
+                                    Project Feedback
+                                </button>
+                                <button 
+                                    onClick={() => setFeedbackView('general')}
+                                    className={`text-sm font-bold pb-1 border-b-2 transition-all ${feedbackView === 'general' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-foreground'}`}
+                                >
+                                    Relationship & General
+                                </button>
+                            </div>
                         </div>
                         <div className="flex flex-wrap gap-3 w-full md:w-auto">
                             <div className="relative flex-1 md:flex-initial">
@@ -921,133 +937,177 @@ export default function BatchDetailsPage() {
                     </div>
  
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse text-sm">
-                            <thead>
-                                <tr className="border-b border-surface-border text-xs uppercase tracking-wider">
-                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('companyName')}>
-                                        {groupBy === 'Company' ? 'Company (Group)' : 'Company'} {sortField === 'companyName' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                    </th>
-                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('contactName')}>
-                                        Contact {sortField === 'contactName' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                    </th>
-                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('projectName')}>
-                                        {groupBy === 'Project' ? 'Project (Group)' : 'Project'} {sortField === 'projectName' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                    </th>
-                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('status')}>
-                                        Status {sortField === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                    </th>
-                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('awarded')}>
-                                        Awarded {sortField === 'awarded' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                    </th>
-                                    <th className="py-3 px-4 font-bold text-secondary text-right">Details</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {groupedData.map((group) => (
-                                    <React.Fragment key={group.key}>
-                                        {group.label && (
-                                            <tr className="bg-surface-border/10">
-                                                <td colSpan={5} className="py-2 px-4 font-bold text-primary text-xs uppercase tracking-widest border-b border-surface-border/30">
-                                                    {groupBy}: {group.label} ({group.items.length})
-                                                </td>
-                                            </tr>
-                                        )}
-                                        {group.items.map((res: any) => {
-                                            const isExpanded = expandedIds.includes(res.id);
-                                            return (
-                                                <React.Fragment key={res.id}>
-                                                    <tr 
-                                                        className={`border-b border-surface-border/50 hover:bg-surface/50 transition-colors cursor-pointer ${isExpanded ? 'bg-primary/5' : ''}`}
-                                                        onClick={() => toggleExpansion(res.id)}
-                                                    >
-                                                        <td className="py-4 px-4 font-medium">{res.companyName}</td>
-                                                        <td className="py-4 px-4 text-primary font-semibold">
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] text-primary">
-                                                                    {res.contactName.charAt(0)}
-                                                                </div>
-                                                                {res.contactName}
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-4 px-4 text-secondary">{res.projectName}</td>
-                                                        <td className="py-4 px-4">
-                                                            <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${res.status === 'Draft' ? 'bg-surface-border text-secondary' :
-                                                                res.status === 'InProgress' ? 'bg-accent/20 text-accent' :
-                                                                    'bg-success/20 text-success'
-                                                                }`}>
-                                                                {res.status}
-                                                            </span>
-                                                        </td>
-                                                        <td className="py-4 px-4 text-secondary">
-                                                            {res.awarded === 'Yes' ? '✅ Awarded' : res.awarded === 'No' ? '❌ Lost' : '-'}
-                                                        </td>
-                                                        <td className="py-4 px-4 text-right">
-                                                            <button className="text-primary hover:bg-primary/10 p-1.5 rounded-full transition-colors">
-                                                                {isExpanded ? <Plus className="w-4 h-4 rotate-45 transform" /> : <Eye className="w-4 h-4" />}
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    {isExpanded && (
-                                                        <tr className="bg-primary/5 border-b border-surface-border/50">
-                                                            <td colSpan={5} className="py-6 px-8 animate-slide-down">
-                                                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                                                    <div className="space-y-4">
-                                                                        <h4 className="text-[10px] font-bold text-secondary uppercase tracking-widest">Pricing Strategy</h4>
-                                                                        <div>
-                                                                            <div className="text-[10px] text-secondary">Carried Price in Bid</div>
-                                                                            <div className="font-mono font-bold">{res.carried_price ? `$${Number(res.carried_price).toLocaleString()}` : 'N/A'}</div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div className="text-[10px] text-secondary">Quote Reasonableness</div>
-                                                                            <div className="font-semibold text-sm">{res.quote_reasonableness || 'No feedback'}</div>
-                                                                        </div>
+                        {feedbackView === 'projects' ? (
+                            <table className="w-full text-left border-collapse text-sm">
+                                <thead>
+                                    <tr className="border-b border-surface-border text-xs uppercase tracking-wider">
+                                        <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('companyName')}>
+                                            {groupBy === 'Company' ? 'Company (Group)' : 'Company'} {sortField === 'companyName' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('contactName')}>
+                                            Contact {sortField === 'contactName' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('projectName')}>
+                                            {groupBy === 'Project' ? 'Project (Group)' : 'Project'} {sortField === 'projectName' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('status')}>
+                                            Status {sortField === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('awarded')}>
+                                            Awarded {sortField === 'awarded' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th className="py-3 px-4 font-bold text-secondary text-right">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {groupedData.map((group) => (
+                                        <React.Fragment key={group.key}>
+                                            {group.label && (
+                                                <tr className="bg-surface-border/10">
+                                                    <td colSpan={5} className="py-2 px-4 font-bold text-primary text-xs uppercase tracking-widest border-b border-surface-border/30">
+                                                        {groupBy}: {group.label} ({group.items.length})
+                                                    </td>
+                                                </tr>
+                                            )}
+                                            {group.items.map((res: any) => {
+                                                const isExpanded = expandedIds.includes(res.id);
+                                                return (
+                                                    <React.Fragment key={res.id}>
+                                                        <tr 
+                                                            className={`border-b border-surface-border/50 hover:bg-surface/50 transition-colors cursor-pointer ${isExpanded ? 'bg-primary/5' : ''}`}
+                                                            onClick={() => toggleExpansion(res.id)}
+                                                        >
+                                                            <td className="py-4 px-4 font-medium">{res.companyName}</td>
+                                                            <td className="py-4 px-4 text-primary font-semibold">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] text-primary">
+                                                                        {res.contactName.charAt(0)}
                                                                     </div>
-                                                                    <div className="space-y-4">
-                                                                        <h4 className="text-[10px] font-bold text-secondary uppercase tracking-widest">Market Insights</h4>
-                                                                        <div>
-                                                                            <div className="text-[10px] text-secondary">Primary Selection Reason</div>
-                                                                            <div className="font-semibold text-sm">{res.reason_not_carried || 'N/A'}</div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div className="text-[10px] text-secondary">Suggestions for Improvement</div>
-                                                                            <div className="text-sm italic text-secondary leading-relaxed">"{res.how_to_improve || 'None shared.'}"</div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="space-y-4">
-                                                                        <h4 className="text-[10px] font-bold text-secondary uppercase tracking-widest">Contact Details</h4>
-                                                                        <div className="flex items-center gap-2">
-                                                                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-xs">
-                                                                                {res.contactName.charAt(0)}
-                                                                            </div>
-                                                                            <div>
-                                                                                <div className="text-sm font-semibold">{res.contactName}</div>
-                                                                                <div className="text-[10px] text-secondary italic">Submitted on {res.submitted_at ? new Date(res.submitted_at).toLocaleString() : 'N/A'}</div>
-                                                                            </div>
-                                                                        </div>
-                                                                        {res.comments && (
-                                                                            <div className="mt-4 p-3 bg-white/50 rounded-md border border-surface-border/30 text-xs italic">
-                                                                                {res.comments}
-                                                                            </div>
-                                                                        )}
-                                                                    </div>
+                                                                    {res.contactName}
                                                                 </div>
                                                             </td>
+                                                            <td className="py-4 px-4 text-secondary">{res.projectName}</td>
+                                                            <td className="py-4 px-4">
+                                                                <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${res.status === 'Draft' ? 'bg-surface-border text-secondary' :
+                                                                    res.status === 'InProgress' ? 'bg-accent/20 text-accent' :
+                                                                        'bg-success/20 text-success'
+                                                                    }`}>
+                                                                    {res.status}
+                                                                </span>
+                                                            </td>
+                                                            <td className="py-4 px-4 text-secondary">
+                                                                {res.awarded === 'Yes' ? '✅ Awarded' : res.awarded === 'No' ? '❌ Lost' : '-'}
+                                                            </td>
+                                                            <td className="py-4 px-4 text-right">
+                                                                <button className="text-primary hover:bg-primary/10 p-1.5 rounded-full transition-colors">
+                                                                    {isExpanded ? <Plus className="w-4 h-4 rotate-45 transform" /> : <Eye className="w-4 h-4" />}
+                                                                </button>
+                                                            </td>
                                                         </tr>
-                                                    )}
-                                                </React.Fragment>
-                                            );
-                                        })}
-                                    </React.Fragment>
-                                ))}
-                                {results.length === 0 && !loadingResults && (
-                                    <tr>
-                                        <td colSpan={6} className="py-8 text-center text-secondary italic">
-                                            No tracking data established yet.
-                                        </td>
+                                                        {isExpanded && (
+                                                            <tr className="bg-primary/5 border-b border-surface-border/50">
+                                                                <td colSpan={6} className="py-6 px-8 animate-slide-down">
+                                                                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                                                        <div className="space-y-4">
+                                                                            <h4 className="text-[10px] font-bold text-secondary uppercase tracking-widest">Pricing Strategy</h4>
+                                                                            <div>
+                                                                                <div className="text-[10px] text-secondary">Carried Price in Bid</div>
+                                                                                <div className="font-mono font-bold">{res.carried_price ? `$${Number(res.carried_price).toLocaleString()}` : 'N/A'}</div>
+                                                                            </div>
+                                                                            <div>
+                                                                                <div className="text-[10px] text-secondary">Quote Reasonableness</div>
+                                                                                <div className="font-semibold text-sm">{res.quote_reasonableness || 'No feedback'}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="space-y-4">
+                                                                            <h4 className="text-[10px] font-bold text-secondary uppercase tracking-widest">Market Insights</h4>
+                                                                            <div>
+                                                                                <div className="text-[10px] text-secondary">Primary Selection Reason</div>
+                                                                                <div className="font-semibold text-sm">{res.reason_not_carried || 'N/A'}</div>
+                                                                            </div>
+                                                                            <div>
+                                                                                <div className="text-[10px] text-secondary">Suggestions for Improvement</div>
+                                                                                <div className="text-sm italic text-secondary leading-relaxed">"{res.how_to_improve || 'None shared.'}"</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="space-y-4">
+                                                                            <h4 className="text-[10px] font-bold text-secondary uppercase tracking-widest">Contact Details</h4>
+                                                                            <div className="flex items-center gap-2">
+                                                                                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-xs">
+                                                                                    {res.contactName.charAt(0)}
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div className="text-sm font-semibold">{res.contactName}</div>
+                                                                                    <div className="text-[10px] text-secondary italic">Submitted on {res.submitted_at ? new Date(res.submitted_at).toLocaleString() : 'N/A'}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {res.comments && (
+                                                                                <div className="mt-4 p-3 bg-white/50 rounded-md border border-surface-border/30 text-xs italic">
+                                                                                    {res.comments}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                    </React.Fragment>
+                                                );
+                                            })}
+                                        </React.Fragment>
+                                    ))}
+                                    {results.length === 0 && !loadingResults && (
+                                        <tr>
+                                            <td colSpan={6} className="py-8 text-center text-secondary italic">
+                                                No tracking data established yet.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <table className="w-full text-left border-collapse text-sm">
+                                <thead>
+                                    <tr className="border-b border-surface-border text-xs uppercase tracking-wider">
+                                        <th className="py-3 px-4 font-bold text-secondary">Company</th>
+                                        <th className="py-3 px-4 font-bold text-secondary">Contact</th>
+                                        <th className="py-3 px-4 font-bold text-secondary">Relationship Feedback</th>
+                                        <th className="py-3 px-4 font-bold text-secondary">Follow-up Impact</th>
+                                        <th className="py-3 px-4 font-bold text-secondary text-right">Date</th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {generalResults.map((gen) => (
+                                        <tr key={gen.id} className="border-b border-surface-border/50 hover:bg-surface/50 transition-colors">
+                                            <td className="py-4 px-4 font-medium">{gen.companyName}</td>
+                                            <td className="py-4 px-4">
+                                                <div className="font-semibold text-primary">{gen.contactName}</div>
+                                            </td>
+                                            <td className="py-4 px-4 w-1/3">
+                                                <div className="text-xs text-secondary bg-surface/30 p-2 rounded italic leading-relaxed">
+                                                    {gen.relationship_feedback || 'No comments shared.'}
+                                                </div>
+                                            </td>
+                                            <td className="py-4 px-4">
+                                                <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded font-medium">
+                                                    {gen.follow_up_impact || 'N/A'}
+                                                </span>
+                                            </td>
+                                            <td className="py-4 px-4 text-right text-[10px] text-secondary italic">
+                                                {new Date(gen.updatedAt).toLocaleDateString()}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {generalResults.length === 0 && !loadingResults && (
+                                        <tr>
+                                            <td colSpan={5} className="py-8 text-center text-secondary italic">
+                                                No general feedback submitted yet.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 </div>
             )}
