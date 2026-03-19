@@ -276,8 +276,15 @@ export default function BatchDetailsPage() {
     };
 
     const selectNonOpeners = () => {
+        // Selection based on if they have opened ANY campaign in this batch or just the "latest"
+        // For simplicity, we'll use the specific stats from the link object itself
         const nonOpeners = links.filter(l => l.email_sent_at && !l.email_opened_at).map(l => l.id);
         setSelectedTokenIds(nonOpeners);
+    };
+
+    const selectIncomplete = () => {
+        const incomplete = links.filter(l => !l.isCompleted).map(l => l.id);
+        setSelectedTokenIds(incomplete);
     };
 
     const selectUnsent = () => {
@@ -788,9 +795,11 @@ export default function BatchDetailsPage() {
                                         {loadingLinks && <RefreshCw className="w-4 h-4 text-secondary animate-spin" />}
                                     </h4>
                                     {activeCampaign.status === 'Draft' && (
-                                        <div className="flex gap-2 text-[10px]">
-                                            <button onClick={selectAllContacts} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">Select All</button>
-                                            <button onClick={selectUnsent} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">Unsent Only</button>
+                                        <div className="flex flex-wrap gap-2 text-[10px]">
+                                            <button onClick={selectAllContacts} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">All</button>
+                                            <button onClick={selectUnsent} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">Unsent</button>
+                                            <button onClick={selectNonOpeners} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors text-accent border border-accent/30">Non-Openers</button>
+                                            <button onClick={selectIncomplete} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors text-danger border border-danger/30">Incomplete</button>
                                         </div>
                                     )}
                                 </div>
@@ -817,7 +826,8 @@ export default function BatchDetailsPage() {
                                         <tr>
                                             {activeCampaign.status === 'Draft' && <th className="py-2 px-3 w-10"></th>}
                                             <th className="py-2 px-3 font-semibold text-secondary">Contact</th>
-                                            <th className="py-2 px-3 font-semibold text-secondary w-20 text-center">Status</th>
+                                            <th className="py-2 px-3 font-semibold text-secondary w-20 text-center">Open</th>
+                                            <th className="py-2 px-3 font-semibold text-secondary w-20 text-center">Progress</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -837,12 +847,19 @@ export default function BatchDetailsPage() {
                                                         <div className="font-medium text-xs break-all">{link.contactEmail}</div>
                                                         <div className="text-xs text-secondary">{link.contactName} ({link.companyName})</div>
                                                     </td>
-                                                    <td className="py-3 px-3 text-center text-xs font-mono">
-                                                        {isSentCampaign ? (
-                                                            link.opened_at ? <span className="text-success font-bold" title={new Date(link.opened_at).toLocaleString()}>Opened</span> : <span className="text-secondary" title={new Date(link.email_sent_at).toLocaleString()}>Sent</span>
+                                                    <td className="py-3 px-3 text-center text-[10px] font-mono">
+                                                        {link.email_opened_at ? (
+                                                            <span className="text-success font-bold" title={new Date(link.email_opened_at).toLocaleString()}>Yes</span>
+                                                        ) : link.email_sent_at ? (
+                                                            <span className="text-secondary" title={new Date(link.email_sent_at).toLocaleString()}>Sent</span>
                                                         ) : (
                                                             <span className="text-surface-border">-</span>
                                                         )}
+                                                    </td>
+                                                    <td className="py-3 px-3 text-center text-[10px] font-mono">
+                                                        <span className={link.isCompleted ? 'text-success font-bold' : 'text-accent'}>
+                                                            {link.completionStats}
+                                                        </span>
                                                     </td>
                                                 </tr>
                                             )
