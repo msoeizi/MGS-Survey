@@ -463,25 +463,31 @@ export default function BatchDetailsPage() {
             </div>
 
             {/* Nav Tabs */}
-            <div className="flex border-b border-surface-border mb-8 overflow-x-auto scroller-hidden">
-                <button
-                    onClick={() => setActiveTab('overview')}
-                    className={`px-6 py-3 font-semibold text-sm whitespace-nowrap border-b-2 transition-colors ${activeTab === 'overview' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-foreground'}`}
-                >
-                    Overview & Export
-                </button>
-                <button
-                    onClick={() => setActiveTab('campaigns')}
-                    className={`px-6 py-3 font-semibold text-sm whitespace-nowrap border-b-2 transition-colors ${activeTab === 'campaigns' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-foreground'}`}
-                >
-                    Email Campaigns
-                </button>
-                <button
-                    onClick={() => setActiveTab('feedback')}
-                    className={`px-6 py-3 font-semibold text-sm whitespace-nowrap border-b-2 transition-colors ${activeTab === 'feedback' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-foreground'}`}
-                >
-                    Feedback Tracking
-                </button>
+            <div className="flex gap-2 border-b border-surface-border mb-10 overflow-x-auto scroller-hidden">
+                {[
+                    { id: 'overview', label: 'Overview & Export', icon: <RefreshCw className="w-4 h-4" /> },
+                    { id: 'campaigns', label: 'Email Campaigns', icon: <Mail className="w-4 h-4" /> },
+                    { id: 'feedback', label: 'Feedback Tracking', icon: <CheckCircle2 className="w-4 h-4" /> },
+                ].map((tab) => {
+                    const isActive = activeTab === tab.id;
+                    return (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id as any)}
+                            className={`flex items-center gap-2 px-8 py-4 font-bold text-sm whitespace-nowrap border-b-2 transition-all duration-300 relative ${
+                                isActive 
+                                ? 'border-primary text-primary bg-primary/5' 
+                                : 'border-transparent text-secondary hover:text-foreground hover:bg-surface/50'
+                            }`}
+                        >
+                            {tab.icon}
+                            {tab.label}
+                            {isActive && (
+                                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary animate-scale-x"></span>
+                            )}
+                        </button>
+                    );
+                })}
             </div>
 
             {activeTab === 'overview' && (
