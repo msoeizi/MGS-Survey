@@ -772,7 +772,7 @@ export default function BatchDetailsPage() {
                                             emailBody
                                                 .replace(/{{CompanyName}}/g, '<span class="bg-yellow-200">Acme Builders</span>')
                                                 .replace(/{{ContactName}}/g, '<span class="bg-yellow-200">John Doe</span>')
-                                                .replace(/{{SurveyLink}}/g, '<a href="#" class="text-blue-600 underline">https://portal.mgssurvey.com/survey/demo-link</a>')
+                                                .replace(/{{SurveyLink}}/g, 'https://portal.mgssurvey.com/survey/demo-link')
                                     }}></div>
                                 ) : (
                                     <textarea
