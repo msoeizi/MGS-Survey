@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 const importRowSchema = z.object({
     CompanyName: z.string().min(1, "Company Name required"),
     ContactName: z.string().min(1, "Contact Name required"),
-    ContactEmail: z.string().email("Invalid email format"),
+    ContactEmail: z.string().email("Invalid email format").optional().or(z.literal("")),
     ProjectName: z.string().min(1, "Project Name required"),
     InvitedDate: z.string().min(1, "Invited Date required"),
     SubmittedPrice: z.coerce.number(),
@@ -21,11 +21,37 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Invalid payload format. Expected array of records.' }, { status: 400 });
         }
 
+        // --- Smart Contact Synchronization (CRM-style) ---
+        // 1. Pre-process to find emails for every (Contact, Company)
+        const contactEmailRegistry = new Map<string, string>();
+        
+        // Helper to normalize keys for registry
+        const getContactKey = (contact: string, company: string) => {
+            const normContact = contact.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const normCompany = company.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return `${normContact}:${normCompany}`;
+        };
+
+        // Pass 1: Collect emails from the CSV rows
+        for (const row of data) {
+            const companyName = row.CompanyName || row['Company Name'] || row['GC Name'] || row.Company || '';
+            const contactName = row.ContactName || row['Contact Name'] || row['Contact Person'] || row.Contact || row['Invited By'] || row['invited by'] || '';
+            const contactEmail = row.ContactEmail || row['Contact Email'] || row['contact email'] || row.Email || '';
+            
+            if (contactName && companyName && contactEmail && contactEmail.includes('@')) {
+                const key = getContactKey(contactName, companyName);
+                if (!contactEmailRegistry.has(key)) {
+                    contactEmailRegistry.set(key, contactEmail.toLowerCase().trim());
+                }
+            }
+        }
+
+        // Pass 2: Optional Database Enrichment for missing emails
+        // (We can skip this for now or add it later if needed, but let's at least check the CSV thoroughly)
+
         let successCount = 0;
         let errors: string[] = [];
 
-        // Process chunk sequentially to avoid race conditions on upsert creation, or use transactions
-        // Since prisma upsert is safe but we want to relate things carefully
         for (const [index, rawRow] of data.entries()) {
             try {
                 // Map common column name variations
@@ -33,7 +59,31 @@ export async function POST(request: Request) {
                 const companyName = row.CompanyName || row['Company Name'] || row['GC Name'] || row.Company || '';
                 const projectName = row.ProjectName || row['Project Name'] || row.Project || '';
                 const contactName = row.ContactName || row['Contact Name'] || row['Contact Person'] || row.Contact || row['Invited By'] || row['invited by'] || '';
-                const contactEmail = row.ContactEmail || row['Contact Email'] || row['contact email'] || row.Email || '';
+                let contactEmail = row.ContactEmail || row['Contact Email'] || row['contact email'] || row.Email || '';
+
+                // Apply Synchronization: If email is missing, check registry
+                if (!contactEmail || !contactEmail.includes('@')) {
+                    const key = getContactKey(contactName, companyName);
+                    if (contactEmailRegistry.has(key)) {
+                        contactEmail = contactEmailRegistry.get(key) || '';
+                    } else {
+                        // Pass 2: Check database for existing contact with this name and company
+                        const existingContact = await prisma.contact.findFirst({
+                            where: {
+                                name: { equals: contactName },
+                                company: { 
+                                    name: { equals: companyName }
+                                }
+                            },
+                            select: { email: true }
+                        });
+                        
+                        if (existingContact?.email) {
+                            contactEmail = existingContact.email;
+                            contactEmailRegistry.set(key, contactEmail); // Cache for other rows
+                        }
+                    }
+                }
 
                 let invitedDate = row.InvitedDate || row['Invited Date'] || row.date || row.Date || row['invited date'] || '';
                 if (typeof invitedDate === 'string' && invitedDate.match(/^\d{4}-[a-zA-Z]+$/)) {
@@ -84,7 +134,10 @@ export async function POST(request: Request) {
                 // 2. Upsert Contact (always create at least one to satisfy FeedbackItem constraints)
                 let contactId = null;
                 const safeContactName = parsed.ContactName ? parsed.ContactName.toLowerCase().replace(/[^a-z0-9]/g, '') : 'estimator';
-                const emailToUse = parsed.ContactEmail ? parsed.ContactEmail.toLowerCase() : `${safeContactName}-${company.id}@example.com`;
+                
+                // Final fallback if email is still missing after registry and DB lookup
+                const emailToUse = contactEmail ? contactEmail.toLowerCase() : `${safeContactName}-${company.id}@example.com`;
+                
                 const contact = await prisma.contact.upsert({
                     where: { email: emailToUse },
                     update: {
