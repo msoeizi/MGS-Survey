@@ -160,7 +160,7 @@ export default function FeedbackFormClient({
             <div className="space-y-12">
                 {/* Partition: Your Projects */}
                 <div className="bg-surface/30 p-4 border-b border-surface-border">
-                    <h2 className="text-xl font-bold text-primary">Your Projects</h2>
+                    <h2 className="text-xl font-bold text-primary italic border-b border-primary/20 pb-1">Projects selected for feedback:</h2>
                 </div>
                 {myProjects.length === 0 && <div className="p-4 text-secondary italic">No projects invited by you.</div>}
                 {myProjects.map((item, idx) => {
@@ -185,9 +185,6 @@ export default function FeedbackFormClient({
                     return (
                         <div key={item.id} className={`glass-panel p-6 md:p-8 animate-slide-up stagger-${(idx % 4) + 1}`}>
                             <div className="border-b border-surface-border pb-4 mb-6 relative">
-                                <div className="absolute -top-12 -left-4 w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-lg hidden md:flex">
-                                    {idx + 1}
-                                </div>
                                 <h1 className="text-3xl font-bold">{item.project.project_name}</h1>
 
                                 {/* Details Expander */}
@@ -312,7 +309,7 @@ export default function FeedbackFormClient({
                 {othersProjects.length > 0 && (
                     <>
                         <div className="bg-surface/30 p-4 border-b border-t border-surface-border mt-12">
-                            <h2 className="text-xl font-bold text-secondary">Projects invited by others:</h2>
+                            <h2 className="text-xl font-bold text-secondary italic border-b border-secondary/20 pb-1">Projects invited by others:</h2>
                         </div>
                         {othersProjects.map((item, idx) => {
                             const data = formData[item.id];
@@ -336,9 +333,6 @@ export default function FeedbackFormClient({
                             return (
                                 <div key={item.id} className={`glass-panel p-6 md:p-8 animate-slide-up stagger-${(idx % 4) + 1}`}>
                                     <div className="border-b border-surface-border pb-4 mb-6 relative">
-                                        <div className="absolute -top-12 -left-4 w-10 h-10 rounded-full bg-secondary/20 text-secondary flex items-center justify-center font-bold text-lg hidden md:flex">
-                                            {idx + 1}
-                                        </div>
                                         <h1 className="text-3xl font-bold text-secondary">{item.project.project_name}</h1>
 
                                         {/* Details Expander */}
