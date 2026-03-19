@@ -118,7 +118,9 @@ export default function BatchDetailsPage() {
  
         const groups: Record<string, any[]> = {};
         filteredResults.forEach(item => {
-            const key = groupBy === 'Company' ? item.companyName : item.projectName;
+            const key = groupBy === 'Company' ? item.companyName : 
+                        groupBy === 'Project' ? item.projectName :
+                        item.contactName;
             if (!groups[key]) groups[key] = [];
             groups[key].push(item);
         });
@@ -887,6 +889,7 @@ export default function BatchDetailsPage() {
                                 <option value="None">Individual Responses</option>
                                 <option value="Company">Group by Company</option>
                                 <option value="Project">Group by Project</option>
+                                <option value="Contact">Group by Contact</option>
                             </select>
                             <button onClick={loadResults} className="p-2 bg-surface-border/20 hover:bg-surface-border/40 rounded-md transition-colors">
                                 <RefreshCw className={`w-4 h-4 text-primary ${loadingResults ? 'animate-spin' : ''}`} />
@@ -900,6 +903,9 @@ export default function BatchDetailsPage() {
                                 <tr className="border-b border-surface-border text-xs uppercase tracking-wider">
                                     <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('companyName')}>
                                         {groupBy === 'Company' ? 'Company (Group)' : 'Company'} {sortField === 'companyName' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                    </th>
+                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('contactName')}>
+                                        Contact {sortField === 'contactName' && (sortOrder === 'asc' ? '↑' : '↓')}
                                     </th>
                                     <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('projectName')}>
                                         {groupBy === 'Project' ? 'Project (Group)' : 'Project'} {sortField === 'projectName' && (sortOrder === 'asc' ? '↑' : '↓')}
@@ -932,6 +938,14 @@ export default function BatchDetailsPage() {
                                                         onClick={() => toggleExpansion(res.id)}
                                                     >
                                                         <td className="py-4 px-4 font-medium">{res.companyName}</td>
+                                                        <td className="py-4 px-4 text-primary font-semibold">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] text-primary">
+                                                                    {res.contactName.charAt(0)}
+                                                                </div>
+                                                                {res.contactName}
+                                                            </div>
+                                                        </td>
                                                         <td className="py-4 px-4 text-secondary">{res.projectName}</td>
                                                         <td className="py-4 px-4">
                                                             <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${res.status === 'Draft' ? 'bg-surface-border text-secondary' :
@@ -1004,7 +1018,7 @@ export default function BatchDetailsPage() {
                                 ))}
                                 {results.length === 0 && !loadingResults && (
                                     <tr>
-                                        <td colSpan={5} className="py-8 text-center text-secondary italic">
+                                        <td colSpan={6} className="py-8 text-center text-secondary italic">
                                             No tracking data established yet.
                                         </td>
                                     </tr>
