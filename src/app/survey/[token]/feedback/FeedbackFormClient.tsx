@@ -515,7 +515,7 @@ export default function FeedbackFormClient({
                     <div className="w-full md:w-auto flex justify-center md:justify-end md:ml-auto">
                         <button
                             onClick={handleSubmit}
-                            className="btn btn-accent shadow-lg shadow-accent/20 px-8 py-3 flex items-center justify-center gap-2 font-bold text-lg w-full md:w-auto"
+                            className="btn btn-primary shadow-lg shadow-primary/20 px-10 py-4 flex items-center justify-center gap-2 font-bold text-xl w-full md:w-auto transition-all hover:scale-105"
                         >
                             Submit Feedback <Send className="w-5 h-5" />
                         </button>
