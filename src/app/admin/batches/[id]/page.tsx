@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { DownloadCloud, ArrowLeft, RefreshCw, FileText, Mail, CheckCircle2, Circle, Plus, Edit2, Copy, Send, Trash2, Calendar, Eye, Save } from 'lucide-react';
 import Papa from 'papaparse';
@@ -25,9 +25,17 @@ export default function BatchDetailsPage() {
     // New state for live results preview directly on page
     const [results, setResults] = useState<any[]>([]);
     const [loadingResults, setLoadingResults] = useState(false);
-
+ 
+    // New state for Analysis Dashboard
+    const [analysis, setAnalysis] = useState<any>(null);
+    const [loadingAnalysis, setLoadingAnalysis] = useState(false);
+ 
     // Tabs
-    const [activeTab, setActiveTab] = useState<'overview' | 'campaigns' | 'feedback'>('campaigns');
+    const [activeTab, setActiveTab] = useState<'overview' | 'campaigns' | 'feedback'>('feedback');
+ 
+    // New state for advanced feedback tracking
+    const [groupBy, setGroupBy] = useState<'None' | 'Company' | 'Project'>('None');
+    const [expandedIds, setExpandedIds] = useState<string[]>([]);
 
     // Email Campaign State
     const [campaigns, setCampaigns] = useState<any[]>([]);
@@ -86,6 +94,43 @@ export default function BatchDetailsPage() {
         if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
         return 0;
     });
+ 
+    const filteredResults = sortedResults.filter(res => {
+        const search = searchTerm.toLowerCase();
+        return (
+            (res.companyName || '').toLowerCase().includes(search) ||
+            (res.projectName || '').toLowerCase().includes(search) ||
+            (res.contactName || '').toLowerCase().includes(search)
+        );
+    });
+ 
+    const toggleExpansion = (id: string) => {
+        if (expandedIds.includes(id)) {
+            setExpandedIds(expandedIds.filter(i => i !== id));
+        } else {
+            setExpandedIds([...expandedIds, id]);
+        }
+    };
+ 
+    // Grouping Logic
+    const getGroupedData = () => {
+        if (groupBy === 'None') return filteredResults.map(item => ({ key: item.id, items: [item], label: null }));
+ 
+        const groups: Record<string, any[]> = {};
+        filteredResults.forEach(item => {
+            const key = groupBy === 'Company' ? item.companyName : item.projectName;
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(item);
+        });
+ 
+        return Object.entries(groups).map(([key, items]) => ({
+            key,
+            label: key,
+            items
+        }));
+    };
+ 
+    const groupedData = getGroupedData();
 
     const loadLinks = async () => {
         setLoadingLinks(true);
@@ -117,6 +162,21 @@ export default function BatchDetailsPage() {
         }
     };
 
+    const loadAnalysis = async () => {
+        setLoadingAnalysis(true);
+        try {
+            const res = await fetch(`/api/admin/batches/${params.id}/analysis`);
+            if (res.ok) {
+                const data = await res.json();
+                setAnalysis(data);
+            }
+        } catch (e) {
+            console.error("Failed to load analysis");
+        } finally {
+            setLoadingAnalysis(false);
+        }
+    };
+ 
     const loadCampaigns = async () => {
         setLoadingCampaigns(true);
         try {
@@ -158,6 +218,7 @@ export default function BatchDetailsPage() {
                     loadLinks();
                     loadResults();
                     loadCampaigns();
+                    loadAnalysis();
                 }
             });
     }, [params.id]);
@@ -415,34 +476,144 @@ export default function BatchDetailsPage() {
             </div>
 
             {activeTab === 'overview' && (
-                <div className="grid md:grid-cols-2 gap-8 mb-8 animate-fade-in-up">
-                    <div className="glass-panel p-6 border-l-4 border-l-accent">
-                        <h3 className="text-lg font-bold mb-2">Survey Links Distribution</h3>
-                        <p className="text-sm text-secondary mb-6">
-                            Generate and download the unique, secure access links to send to your invited contacts.
-                        </p>
-                        <button
-                            onClick={handleExportLinks}
-                            disabled={exporting}
-                            className="btn w-full justify-center gap-2 bg-accent hover:opacity-90 text-white shadow-md border-none"
-                        >
-                            {exporting ? <RefreshCw className="w-5 h-5 animate-spin" /> : <DownloadCloud className="w-5 h-5" />}
-                            {exporting ? 'Generating...' : 'Export Links to CSV'}
-                        </button>
+                <div className="animate-fade-in-up">
+                    <div className="grid md:grid-cols-2 gap-8 mb-8">
+                        <div className="glass-panel p-6 border-l-4 border-l-accent">
+                            <h3 className="text-lg font-bold mb-2">Survey Links Distribution</h3>
+                            <p className="text-sm text-secondary mb-6">
+                                Generate and download the unique, secure access links to send to your invited contacts.
+                            </p>
+                            <button
+                                onClick={handleExportLinks}
+                                disabled={exporting}
+                                className="btn w-full justify-center gap-2 bg-accent hover:opacity-90 text-white shadow-md border-none"
+                            >
+                                {exporting ? <RefreshCw className="w-5 h-5 animate-spin" /> : <DownloadCloud className="w-5 h-5" />}
+                                {exporting ? 'Generating...' : 'Export Links to CSV'}
+                            </button>
+                        </div>
+ 
+                        <div className="glass-panel p-6 border-l-4 border-l-success">
+                            <h3 className="text-lg font-bold mb-2">Feedback Results</h3>
+                            <p className="text-sm text-secondary mb-6">
+                                Download the collected feedback data from this campaign. Only visible to internal admins.
+                            </p>
+                            <button
+                                onClick={handleExportResults}
+                                className="btn btn-primary w-full justify-center gap-2"
+                            >
+                                <FileText className="w-5 h-5" /> Export Results to CSV
+                            </button>
+                        </div>
                     </div>
-
-                    <div className="glass-panel p-6 border-l-4 border-l-success">
-                        <h3 className="text-lg font-bold mb-2">Feedback Results</h3>
-                        <p className="text-sm text-secondary mb-6">
-                            Download the collected feedback data from this campaign. Only visible to internal admins.
-                        </p>
-                        <button
-                            onClick={handleExportResults}
-                            className="btn btn-primary w-full justify-center gap-2"
-                        >
-                            <FileText className="w-5 h-5" /> Export Results to CSV
-                        </button>
-                    </div>
+ 
+                    {/* Visual Analytics Section */}
+                    {loadingAnalysis ? (
+                        <div className="p-8 text-center text-secondary animate-pulse italic">Crunching the data...</div>
+                    ) : analysis ? (
+                        <div className="grid lg:grid-cols-3 gap-8 mb-8">
+                            {/* Funnel Chart */}
+                            <div className="lg:col-span-2 glass-panel p-6">
+                                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+                                    <RefreshCw className="w-5 h-5 text-primary" /> Campaign Performance Funnel
+                                </h3>
+                                <div className="space-y-6">
+                                    {[
+                                        { label: 'Invited', count: analysis.funnel.invited, color: 'bg-secondary' },
+                                        { label: 'Opened', count: analysis.funnel.opened, color: 'bg-accent' },
+                                        { label: 'Started', count: (analysis.funnel.submitted + analysis.funnel.started), color: 'bg-primary' },
+                                        { label: 'Submitted', count: analysis.funnel.submitted, color: 'bg-success' },
+                                    ].map((step, idx, arr) => {
+                                        const pct = arr[0].count > 0 ? (step.count / arr[0].count) * 100 : 0;
+                                        return (
+                                            <div key={idx} className="relative group">
+                                                <div className="flex justify-between items-center mb-1 text-sm">
+                                                    <span className="font-semibold text-secondary">{step.label}</span>
+                                                    <span className="font-bold">{step.count} ({Math.round(pct)}%)</span>
+                                                </div>
+                                                <div className="w-full h-8 bg-surface-border/30 rounded-full overflow-hidden flex items-center">
+                                                    <div
+                                                        className={`h-full ${step.color} transition-all duration-1000 ease-out flex items-center px-4`}
+                                                        style={{ width: `${pct}%` }}
+                                                    >
+                                                        {pct > 15 && <span className="text-[10px] text-white font-bold whitespace-nowrap">{Math.round(pct)}% Conversion</span>}
+                                                    </div>
+                                                </div>
+                                                {idx < arr.length - 1 && (
+                                                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-secondary opacity-30">
+                                                        ↓
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+ 
+                            {/* Win/Loss & Reasons */}
+                            <div className="flex flex-col gap-6">
+                                <div className="glass-panel p-6 flex-1">
+                                    <h3 className="text-lg font-bold mb-4">Win/Loss Split</h3>
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <div className="flex-1 text-center">
+                                            <div className="text-2xl font-bold text-success">{analysis.winLoss.won}</div>
+                                            <div className="text-[10px] text-secondary uppercase">Awarded</div>
+                                        </div>
+                                        <div className="w-px h-10 bg-surface-border"></div>
+                                        <div className="flex-1 text-center">
+                                            <div className="text-2xl font-bold text-danger">{analysis.winLoss.lost}</div>
+                                            <div className="text-[10px] text-secondary uppercase">Not Awarded</div>
+                                        </div>
+                                    </div>
+                                    {/* Small Bar */}
+                                    <div className="w-full h-3 bg-surface-border/30 rounded-full flex overflow-hidden">
+                                        {analysis.winLoss.won + analysis.winLoss.lost > 0 ? (
+                                            <>
+                                                <div className="h-full bg-success" style={{ width: `${(analysis.winLoss.won / (analysis.winLoss.won + analysis.winLoss.lost)) * 100}%` }}></div>
+                                                <div className="h-full bg-danger" style={{ width: `${(analysis.winLoss.lost / (analysis.winLoss.won + analysis.winLoss.lost)) * 100}%` }}></div>
+                                            </>
+                                        ) : <div className="w-full h-full bg-secondary opacity-20"></div>}
+                                    </div>
+                                </div>
+ 
+                                <div className="glass-panel p-6 flex-1">
+                                    <h4 className="text-xs font-bold text-secondary uppercase tracking-widest mb-4">Top Feedback Reasons</h4>
+                                    <div className="space-y-3">
+                                        {analysis.reasons.map((r: any, i: number) => (
+                                            <div key={i} className="flex justify-between items-center text-sm">
+                                                <span className="text-secondary truncate pr-2">{r.reason || 'Unspecified'}</span>
+                                                <span className="font-mono bg-surface-border/50 px-2 py-0.5 rounded text-xs">{r.count}</span>
+                                            </div>
+                                        ))}
+                                        {analysis.reasons.length === 0 && <div className="text-xs text-secondary italic">No loss reasons recorded yet.</div>}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : null}
+ 
+                    {/* Recent Submissions Feed */}
+                    {analysis?.recentActivity?.length > 0 && (
+                        <div className="glass-panel p-6 mb-8">
+                            <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                                <CheckCircle2 className="w-5 h-5 text-success" /> Recent Submissions
+                            </h3>
+                            <div className="space-y-4">
+                                {analysis.recentActivity.map((activity: any, i: number) => (
+                                    <div key={i} className="flex items-center justify-between py-3 border-b border-surface-border/50 last:border-0 hover:bg-surface/30 transition-colors px-2 rounded">
+                                        <div>
+                                            <div className="font-semibold text-sm">{activity.company}</div>
+                                            <div className="text-xs text-secondary">{activity.project} — {activity.contact}</div>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="text-[10px] text-secondary italic">{new Date(activity.date).toLocaleTimeString()}</div>
+                                            <span className="text-[10px] bg-success/20 text-success px-2 py-0.5 rounded font-bold">SUBMITTED</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
 
@@ -690,62 +861,151 @@ export default function BatchDetailsPage() {
 
             {activeTab === 'feedback' && (
                 <div className="glass-panel p-6 mt-8 animate-fade-in-up">
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <div>
                             <h3 className="text-lg font-bold">Feedback Item Tracking</h3>
                             <p className="text-secondary text-sm">Review incoming survey data directly from the dashboard.</p>
                         </div>
-                        {loadingResults && <RefreshCw className="w-5 h-5 text-secondary animate-spin" />}
+                        <div className="flex flex-wrap gap-3 w-full md:w-auto">
+                            <div className="relative flex-1 md:flex-initial">
+                                <input
+                                    type="text"
+                                    placeholder="Search feedback..."
+                                    className="text-xs py-2 pl-8 pr-8 w-full"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary opacity-50">
+                                    <Eye className="w-3 h-3" />
+                                </span>
+                            </div>
+                            <select 
+                                className="text-xs py-2 px-3 m-0 bg-surface-border/20 border-none rounded-md font-semibold text-primary cursor-pointer w-full md:w-auto"
+                                value={groupBy}
+                                onChange={(e: any) => setGroupBy(e.target.value)}
+                            >
+                                <option value="None">Individual Responses</option>
+                                <option value="Company">Group by Company</option>
+                                <option value="Project">Group by Project</option>
+                            </select>
+                            <button onClick={loadResults} className="p-2 bg-surface-border/20 hover:bg-surface-border/40 rounded-md transition-colors">
+                                <RefreshCw className={`w-4 h-4 text-primary ${loadingResults ? 'animate-spin' : ''}`} />
+                            </button>
+                        </div>
                     </div>
-
+ 
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse text-sm">
                             <thead>
-                                <tr className="border-b border-surface-border">
-                                    <th className="py-3 px-4 font-semibold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('companyName')}>
-                                        Company {sortField === 'companyName' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                <tr className="border-b border-surface-border text-xs uppercase tracking-wider">
+                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('companyName')}>
+                                        {groupBy === 'Company' ? 'Company (Group)' : 'Company'} {sortField === 'companyName' && (sortOrder === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="py-3 px-4 font-semibold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('projectName')}>
-                                        Project {sortField === 'projectName' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('projectName')}>
+                                        {groupBy === 'Project' ? 'Project (Group)' : 'Project'} {sortField === 'projectName' && (sortOrder === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="py-3 px-4 font-semibold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('status')}>
+                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('status')}>
                                         Status {sortField === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="py-3 px-4 font-semibold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('awarded')}>
+                                    <th className="py-3 px-4 font-bold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('awarded')}>
                                         Awarded {sortField === 'awarded' && (sortOrder === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="py-3 px-4 font-semibold text-secondary cursor-pointer hover:text-primary" onClick={() => handleSort('submitted_at')}>
-                                        Last Update {sortField === 'submitted_at' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                    </th>
+                                    <th className="py-3 px-4 font-bold text-secondary text-right">Details</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {sortedResults.map((res, i) => (
-                                    <tr key={i} className="border-b border-surface-border/50 hover:bg-surface/50 transition-colors">
-                                        <td className="py-4 px-4 font-medium">{res.companyName}</td>
-                                        <td className="py-4 px-4 text-secondary">{res.projectName}</td>
-                                        <td className="py-4 px-4">
-                                            <span className={`px-2 py-1 rounded text-xs font-semibold ${res.status === 'Draft' ? 'bg-surface-border text-secondary' :
-                                                res.status === 'InProgress' ? 'bg-accent/20 text-accent' :
-                                                    'bg-success/20 text-success'
-                                                }`}>
-                                                {res.status}
-                                            </span>
-                                        </td>
-                                        <td className="py-4 px-4 text-secondary">
-                                            {res.awarded === 'Yes' ? '✅' : res.awarded === 'No' ? '❌' : '-'}
-                                        </td>
-                                        <td className="py-4 px-4 text-secondary text-xs">
-                                            {res.submitted_at
-                                                ? new Date(res.submitted_at).toLocaleDateString()
-                                                : 'Not submitted'}
-                                        </td>
-                                    </tr>
+                                {groupedData.map((group) => (
+                                    <React.Fragment key={group.key}>
+                                        {group.label && (
+                                            <tr className="bg-surface-border/10">
+                                                <td colSpan={5} className="py-2 px-4 font-bold text-primary text-xs uppercase tracking-widest border-b border-surface-border/30">
+                                                    {groupBy}: {group.label} ({group.items.length})
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {group.items.map((res: any) => {
+                                            const isExpanded = expandedIds.includes(res.id);
+                                            return (
+                                                <React.Fragment key={res.id}>
+                                                    <tr 
+                                                        className={`border-b border-surface-border/50 hover:bg-surface/50 transition-colors cursor-pointer ${isExpanded ? 'bg-primary/5' : ''}`}
+                                                        onClick={() => toggleExpansion(res.id)}
+                                                    >
+                                                        <td className="py-4 px-4 font-medium">{res.companyName}</td>
+                                                        <td className="py-4 px-4 text-secondary">{res.projectName}</td>
+                                                        <td className="py-4 px-4">
+                                                            <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${res.status === 'Draft' ? 'bg-surface-border text-secondary' :
+                                                                res.status === 'InProgress' ? 'bg-accent/20 text-accent' :
+                                                                    'bg-success/20 text-success'
+                                                                }`}>
+                                                                {res.status}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-4 px-4 text-secondary">
+                                                            {res.awarded === 'Yes' ? '✅ Awarded' : res.awarded === 'No' ? '❌ Lost' : '-'}
+                                                        </td>
+                                                        <td className="py-4 px-4 text-right">
+                                                            <button className="text-primary hover:bg-primary/10 p-1.5 rounded-full transition-colors">
+                                                                {isExpanded ? <Plus className="w-4 h-4 rotate-45 transform" /> : <Eye className="w-4 h-4" />}
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    {isExpanded && (
+                                                        <tr className="bg-primary/5 border-b border-surface-border/50">
+                                                            <td colSpan={5} className="py-6 px-8 animate-slide-down">
+                                                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                                                    <div className="space-y-4">
+                                                                        <h4 className="text-[10px] font-bold text-secondary uppercase tracking-widest">Pricing Strategy</h4>
+                                                                        <div>
+                                                                            <div className="text-[10px] text-secondary">Carried Price in Bid</div>
+                                                                            <div className="font-mono font-bold">{res.carried_price ? `$${Number(res.carried_price).toLocaleString()}` : 'N/A'}</div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div className="text-[10px] text-secondary">Quote Reasonableness</div>
+                                                                            <div className="font-semibold text-sm">{res.quote_reasonableness || 'No feedback'}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="space-y-4">
+                                                                        <h4 className="text-[10px] font-bold text-secondary uppercase tracking-widest">Market Insights</h4>
+                                                                        <div>
+                                                                            <div className="text-[10px] text-secondary">Primary Selection Reason</div>
+                                                                            <div className="font-semibold text-sm">{res.reason_not_carried || 'N/A'}</div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div className="text-[10px] text-secondary">Suggestions for Improvement</div>
+                                                                            <div className="text-sm italic text-secondary leading-relaxed">"{res.how_to_improve || 'None shared.'}"</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="space-y-4">
+                                                                        <h4 className="text-[10px] font-bold text-secondary uppercase tracking-widest">Contact Details</h4>
+                                                                        <div className="flex items-center gap-2">
+                                                                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-xs">
+                                                                                {res.contactName.charAt(0)}
+                                                                            </div>
+                                                                            <div>
+                                                                                <div className="text-sm font-semibold">{res.contactName}</div>
+                                                                                <div className="text-[10px] text-secondary italic">Submitted on {res.submitted_at ? new Date(res.submitted_at).toLocaleString() : 'N/A'}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        {res.comments && (
+                                                                            <div className="mt-4 p-3 bg-white/50 rounded-md border border-surface-border/30 text-xs italic">
+                                                                                {res.comments}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </React.Fragment>
+                                            );
+                                        })}
+                                    </React.Fragment>
                                 ))}
                                 {results.length === 0 && !loadingResults && (
                                     <tr>
-                                        <td colSpan={5} className="py-8 text-center text-secondary">
-                                            No tracking data established.
+                                        <td colSpan={5} className="py-8 text-center text-secondary italic">
+                                            No tracking data established yet.
                                         </td>
                                     </tr>
                                 )}

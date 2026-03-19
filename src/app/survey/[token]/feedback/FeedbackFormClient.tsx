@@ -362,7 +362,7 @@ export default function FeedbackFormClient({
 
                                     <div className="grid md:grid-cols-2 gap-8">
                                         <div className="col-span-1 md:col-span-2">
-                                            <label className="block text-sm font-medium mb-3">Was your company awarded this project?</label>
+                                            <label className="block text-sm font-medium mb-3">Project Award Status</label>
                                             <div className="flex flex-col md:flex-row gap-4 max-w-md mt-2">
                                                 {['Yes', 'No'].map((opt) => (
                                                     <label key={opt} className={`radio-card ${data.awarded === opt ? 'selected' : ''}`}>
@@ -385,7 +385,7 @@ export default function FeedbackFormClient({
                                             <div className="col-span-1 md:col-span-2 grid md:grid-cols-2 gap-8 animate-slide-down">
                                                 <div className="col-span-1">
                                                     <label className="block text-sm font-medium mb-2">
-                                                        What was the millwork quote price you carried?
+                                                        To help us calibrate our future pricing, could you share the millwork value you carried in your bid?
                                                     </label>
                                                     <div className="relative">
                                                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary">$</span>
@@ -401,7 +401,7 @@ export default function FeedbackFormClient({
                                                 </div>
 
                                                 <div className="col-span-1 md:col-span-2">
-                                                    <label className="block text-sm font-medium mb-2">What was main reason we were not the first choice?</label>
+                                                    <label className="block text-sm font-medium mb-2">If MGS was not the selected partner for this project, we would appreciate knowing the primary reason:</label>
                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
                                                         {['Price', 'Client\'s Decision', 'We had a preferred MW company', 'Other'].map(reasonOpt => (
                                                             <label key={reasonOpt} className={`radio-option ${data.reason === reasonOpt ? 'selected' : ''}`}>
@@ -420,7 +420,7 @@ export default function FeedbackFormClient({
                                                 </div>
 
                                                 <div className="col-span-1 md:col-span-2">
-                                                    <label className="block text-sm font-medium mb-2">What could have we done to win this project?</label>
+                                                    <label className="block text-sm font-medium mb-2">Do you have any suggestions on how we could have improved our proposal to better meet your requirements?</label>
                                                     <textarea
                                                         rows={3}
                                                         placeholder="Help us improve our service..."
@@ -435,7 +435,7 @@ export default function FeedbackFormClient({
 
                                         {data.awarded === 'No' && (
                                             <div className="col-span-1 md:col-span-2 animate-slide-down">
-                                                <label className="block text-sm font-medium mb-3">How reasonable was our {submittedPrice} quote?</label>
+                                                <label className="block text-sm font-medium mb-3">In your professional opinion, how did our {submittedPrice} proposal compare to the market?</label>
                                                 <div className="flex flex-col md:flex-row gap-4 max-w-2xl mt-2">
                                                     {['It was fair', 'Too high', 'Too low'].map((opt) => (
                                                         <label key={opt} className={`radio-card ${data.quote_reasonableness === opt ? 'selected' : ''}`}>

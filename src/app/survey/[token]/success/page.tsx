@@ -19,10 +19,13 @@ export default async function SuccessPage(props: {
                         <CheckCircle className="w-12 h-12" />
                     </div>
                 </div>
-                <h1 className="text-3xl font-bold mb-4">Feedback Submitted Successfully</h1>
+                <h1 className="text-3xl font-bold mb-4">Thank You for Your Feedback</h1>
                 <p className="text-secondary leading-relaxed mb-8">
-                    Thank you for providing your feedback. Your responses have been securely transmitted to our team and locked.
+                    We truly appreciate you sharing your insights with us. Your professional perspective is invaluable for our growth and helps us refine our partnership with your team.
                 </p>
+                <div className="bg-success/5 border border-success/20 rounded-lg p-4 mb-8 text-sm text-success">
+                    Your responses have been securely received and recorded.
+                </div>
                 <button className="btn btn-secondary w-full cursor-not-allowed opacity-50" disabled>
                     Form Locked
                 </button>

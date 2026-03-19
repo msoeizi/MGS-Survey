@@ -33,17 +33,21 @@ export default async function SurveyLandingPage(props: {
                     We truly appreciate you taking the time to provide feedback on your experience with <strong className="text-primary">{company?.name}</strong>.
                 </p>
 
-                <div className="bg-surface p-6 rounded-lg text-left mb-8 border border-surface-border w-full">
-                    <h3 className="font-semibold text-lg text-primary mb-2">Campaign: {batch?.name}</h3>
-                    <p className="text-secondary mb-4">
-                        Your insights are invaluable in helping us understand the market and improve our future collaborations. 
-                        Please help us by reviewing the projects below.
+                <div className="space-y-6 text-secondary leading-relaxed">
+                    <p className="text-lg">
+                        Thank you for taking the time to provide feedback on our recent project tenders. Your insights are incredibly valuable to us as we strive to better serve your team and improve our partnership.
                     </p>
-                    <ul className="list-disc pl-6 text-sm text-secondary space-y-2 text-left">
-                        <li>Please select the projects you wish to provide feedback on.</li>
-                        <li>Your progress is automatically saved, so you can return at any time.</li>
-                        <li>Once submitted, your feedback will be shared directly with our team.</li>
+                    <p>
+                        We’ve listed a few projects where we recently submitted pricing. For each one, we would greatly appreciate your professional perspective on:
+                    </p>
+                    <ul className="list-disc pl-8 space-y-3 text-sm">
+                        <li>Whether the project has been awarded and if our pricing was competitive.</li>
+                        <li>Any specific areas where we could have improved our proposal to better align with your needs.</li>
+                        <li>General feedback on how we can make our working relationship even stronger.</li>
                     </ul>
+                    <p className="font-medium text-primary italic">
+                        Your honest feedback is the most important tool we have for growth. Thank you for your continued partnership.
+                    </p>
                 </div>
 
                 <Link

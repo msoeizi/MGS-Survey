@@ -63,15 +63,15 @@ export default function ProjectSelectionClient({
     return (
         <div className="animate-fade-in">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold mb-2">Select Projects</h1>
-                <p className="text-secondary">Please check the projects you would like to provide feedback for.</p>
+                <h1 className="text-3xl font-bold mb-2">Project Selection</h1>
+                <p className="text-secondary text-lg">Please select the projects for which you would like to provide your professional feedback.</p>
             </div>
 
             <div className="glass-panel overflow-hidden mb-8">
                 <div className="divide-y divide-surface-border">
                     {/* Partition: Your Projects */}
                     <div className="bg-surface/30 p-4 border-b border-surface-border">
-                        <h2 className="text-xl font-bold text-primary">Your Projects</h2>
+                        <h2 className="text-xl font-bold text-primary">Projects Invited by You</h2>
                     </div>
                     {myProjects.length === 0 && <div className="p-4 text-secondary italic">No projects invited by you.</div>}
                     {myProjects.map((item, idx) => {
@@ -113,7 +113,7 @@ export default function ProjectSelectionClient({
                     {othersProjects.length > 0 && (
                         <>
                             <div className="bg-surface/30 p-4 border-b border-t border-surface-border mt-8">
-                                <h2 className="text-xl font-bold text-secondary">Projects invited by others:</h2>
+                                <h2 className="text-xl font-bold text-secondary">Other Projects from Your Company</h2>
                             </div>
                             {othersProjects.map((item, idx) => {
                                 const isSelected = selected.has(item.projectId);
