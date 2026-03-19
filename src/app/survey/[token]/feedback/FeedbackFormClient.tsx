@@ -145,8 +145,15 @@ export default function FeedbackFormClient({
         <div className="animate-fade-in relative pb-32">
             <div className="mb-8 flex justify-between items-end">
                 <div>
-                    <h1 className="text-3xl font-bold mb-2">Project Feedback</h1>
-                    <p className="text-secondary">Please provide your feedback for the selected projects below.</p>
+                    <h1 className="text-3xl font-bold mb-2">
+                        {locked ? 'Feedback Submitted' : 'Project Feedback'}
+                    </h1>
+                    <p className="text-secondary text-lg">
+                        {locked 
+                            ? "You have completed this feedback and it's been submitted. We appreciate your time and attention." 
+                            : 'Please provide your feedback for the selected projects below.'
+                        }
+                    </p>
                 </div>
             </div>
 

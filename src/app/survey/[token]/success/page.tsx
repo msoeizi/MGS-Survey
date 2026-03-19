@@ -12,23 +12,34 @@ export default async function SuccessPage(props: {
     if (!tokenRecord) return null;
 
     return (
-        <div className="animate-fade-in flex items-center justify-center pt-24">
-            <div className="glass-card text-center p-12 max-w-xl shadow-xl w-full">
-                <div className="flex justify-center mb-6">
-                    <div className="w-20 h-20 bg-success/20 text-success rounded-full flex items-center justify-center animate-slide-down">
-                        <CheckCircle className="w-12 h-12" />
+        <div className="animate-fade-in flex items-center justify-center pt-24 pb-12 px-4">
+            <div className="glass-panel text-center p-8 md:p-14 max-w-xl shadow-2xl w-full border-t-8 border-success">
+                <div className="flex justify-center mb-8">
+                    <div className="w-24 h-24 bg-success/10 text-success rounded-full flex items-center justify-center animate-bounce-subtle">
+                        <CheckCircle className="w-14 h-14" />
                     </div>
                 </div>
-                <h1 className="text-3xl font-bold mb-4">Thank You for Your Feedback</h1>
-                <p className="text-secondary leading-relaxed mb-8">
-                    We truly appreciate you sharing your insights with us. Your professional perspective is invaluable for our growth and helps us refine our partnership with your team.
+                <h1 className="text-4xl font-bold mb-6 tracking-tight">Thank You!</h1>
+                <p className="text-lg text-secondary leading-relaxed mb-10">
+                    We truly appreciate you sharing your insights with us. Your professional perspective is invaluable for our growth and directly helps us refine our service and partnership with your team.
                 </p>
-                <div className="bg-success/5 border border-success/20 rounded-lg p-4 mb-8 text-sm text-success">
-                    Your responses have been securely received and recorded.
+                <div className="bg-success/5 border border-success/20 rounded-xl p-6 mb-10 text-base text-success font-medium">
+                    Your feedback has been securely received and recorded for our team to review.
                 </div>
-                <button className="btn btn-secondary w-full cursor-not-allowed opacity-50" disabled>
-                    Form Locked
-                </button>
+                
+                <div className="flex flex-col gap-4">
+                    <a 
+                        href="https://www.moderngrains.com" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="btn btn-primary py-4 px-8 text-lg shadow-lg shadow-primary/20 hover:scale-105 transform transition-all"
+                    >
+                        Visit Modern Grains Website
+                    </a>
+                    <p className="text-xs text-secondary/60 mt-4">
+                        You can safely close this window.
+                    </p>
+                </div>
             </div>
         </div>
     );

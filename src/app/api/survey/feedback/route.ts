@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { validateSurveyToken } from '@/lib/survey-auth';
+import { parsePrice } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,10 +43,10 @@ export async function PUT(request: Request) {
                     data: {
                         awarded: data.awarded,
                         reason_not_carried: data.reason,
-                        carried_price: data.carried_price ? parseFloat(data.carried_price) : null,
+                        carried_price: parsePrice(data.carried_price),
                         how_to_improve: data.how_to_improve,
                         quote_reasonableness: data.quote_reasonableness,
-                        awarded_price: data.price ? parseFloat(data.price) : null,
+                        awarded_price: parsePrice(data.price),
                         comments: data.comments,
                         status: 'InProgress'
                     }
