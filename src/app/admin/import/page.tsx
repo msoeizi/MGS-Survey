@@ -91,18 +91,18 @@ export default function ImportPage() {
                     </button>
                 </div>
 
-                <div className="glass-card flex flex-col justify-center">
+                <div className="glass-panel p-8 flex flex-col justify-center">
                     <h3 className="text-lg font-bold mb-4 border-b border-surface-border pb-2">Required CSV Columns</h3>
                     <p className="text-sm text-secondary mb-4">
-                        The exact column headings matter, but the order of the columns does not. <strong className="text-foreground border-b border-danger">All fields below are mandatory</strong>.
+                        The exact column headings matter, but the order of the columns does not. <strong className="text-foreground border-b border-accent">Contact Email is optional</strong> if the estimator already exists in our system.
                     </p>
-                    <ul className="space-y-3 text-sm text-secondary">
-                        <li><strong className="text-foreground">CompanyName</strong></li>
-                        <li><strong className="text-foreground">ProjectName</strong> (Unique Tracking ID is auto-generated)</li>
-                        <li><strong className="text-foreground">ContactName</strong></li>
-                        <li><strong className="text-foreground">ContactEmail</strong></li>
-                        <li><strong className="text-foreground">InvitedDate</strong> (YYYY-MM-DD format)</li>
-                        <li><strong className="text-foreground">SubmittedPrice</strong> (Numeric, no currency symbols)</li>
+                    <ul className="list-disc pl-5 space-y-3 text-sm text-secondary">
+                        <li><strong className="text-foreground text-xs uppercase tracking-wider">CompanyName</strong> — The GC or Customer name.</li>
+                        <li><strong className="text-foreground text-xs uppercase tracking-wider">ProjectName</strong> — Unique tracking ID is auto-generated.</li>
+                        <li><strong className="text-foreground text-xs uppercase tracking-wider">ContactName</strong> — Estimator or PM name.</li>
+                        <li><strong className="text-foreground text-xs uppercase tracking-wider">ContactEmail</strong> — Optional if already in CRM.</li>
+                        <li><strong className="text-foreground text-xs uppercase tracking-wider">InvitedDate</strong> — Format: YYYY-MM-DD.</li>
+                        <li><strong className="text-foreground text-xs uppercase tracking-wider">SubmittedPrice</strong> — Numeric, no currency symbols.</li>
                     </ul>
                 </div>
             </div>
