@@ -131,6 +131,11 @@ export async function processCampaignDispatch(campaignId: string, tokenIds: stri
                 data: { status: 'Failed' }
             });
         }
+        
+        // Respect Resend free tier rate limit: 2 requests per second maximum
+        if (tokens.length > 1) {
+            await new Promise(resolve => setTimeout(resolve, 600));
+        }
     }
 
     await prisma.emailCampaign.update({
