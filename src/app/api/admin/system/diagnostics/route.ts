@@ -47,7 +47,28 @@ export async function GET(request: Request) {
             pm2Logs = e.message;
         }
 
+        // 3. Count total unique contacts and how many were sent
+        const tokens = await prisma.accessToken.findMany({
+            include: { deliveries: true }
+        });
+        
+        let totalContacts = tokens.length;
+        let contactsReceivedEmail = 0;
+        let contactsPending = 0;
+        
+        tokens.forEach(t => {
+            const hasSent = t.email_sent_at !== null || t.deliveries.some(d => d.status === 'Sent' || d.status === 'Delivered');
+            if (hasSent) contactsReceivedEmail++;
+            else contactsPending++;
+        });
+
         return NextResponse.json({
+            deliveryVerification: {
+                totalContacts,
+                contactsReceivedEmail,
+                contactsPending,
+                successRate: totalContacts > 0 ? (contactsReceivedEmail / totalContacts) * 100 : 0
+            },
             failures: failedDeliveries.map((d: any) => ({
                 id: d.id,
                 contact: d.token.contact?.email,
