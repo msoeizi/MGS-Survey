@@ -52,6 +52,8 @@ export async function POST(
 
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
         let successCount = 0;
+        let skippedCount = 0;
+        const skippedEmails: string[] = [];
         let lastError = null;
 
         // Check if this is a scheduled send
@@ -59,7 +61,12 @@ export async function POST(
         const isScheduled = campaign.scheduled_for && new Date(campaign.scheduled_for) > now;
 
         for (const t of tokens) {
-            if (!t.contact || !t.contact.email) continue;
+            if (!t.contact || !t.contact.email) {
+                console.log(`[SendRoute] Skipping token ${t.id} - Missing contact or email.`);
+                skippedCount++;
+                skippedEmails.push(t.contact?.name || t.id);
+                continue;
+            }
 
             const companyName = t.company?.name || 'Your Company';
             const contactName = t.contact.name || 'Estimator';
@@ -175,6 +182,8 @@ export async function POST(
         return NextResponse.json({
             success: true,
             count: successCount,
+            skipped: skippedCount,
+            skippedNames: skippedEmails,
             status: isScheduled ? 'Scheduled' : 'Sent'
         });
 

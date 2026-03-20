@@ -435,7 +435,11 @@ export default function BatchDetailsPage() {
 
             const data = await res.json();
             if (res.ok) {
-                alert(`Successfully dispatched ${data.count} emails!`);
+                let msg = `Successfully dispatched ${data.count} emails!`;
+                if (data.skipped > 0) {
+                    msg += `\n\nNote: ${data.skipped} recipient(s) were skipped because they are missing an email address.`;
+                }
+                alert(msg);
                 setSelectedTokenIds([]);
                 loadCampaigns(); // Refresh list to show "Sent" status
                 setActiveCampaign(null); // Return to list
@@ -933,7 +937,9 @@ export default function BatchDetailsPage() {
                                                         </td>
                                                     )}
                                                     <td className="py-3 px-3">
-                                                        <div className="font-medium text-xs break-all">{link.contactEmail}</div>
+                                                        <div className={`font-medium text-xs break-all ${(!link.contactEmail || link.contactEmail === 'N/A') ? 'text-danger italic font-bold' : ''}`}>
+                                                            {link.contactEmail || 'MISSING EMAIL'}
+                                                        </div>
                                                         <div className="text-xs text-secondary">{link.contactName} ({link.companyName})</div>
                                                     </td>
                                                     <td className="py-3 px-3 text-center text-[10px] whitespace-nowrap">

@@ -33,6 +33,12 @@ jobs:
             npm install --production=false
             npx prisma generate
             npx prisma db push --accept-data-loss
+            
+            # Create a deployment status file in the public directory
+            echo "Last Deployment: $(date)" > public/deploy-status.txt
+            echo "Commit: $(git rev-parse HEAD)" >> public/deploy-status.txt
+            echo "Branch: main" >> public/deploy-status.txt
+            
             npm run build
             pm2 restart survey-app || pm2 start npm --name "survey-app" -- start
             pm2 save
