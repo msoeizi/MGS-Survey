@@ -926,8 +926,11 @@ export default function BatchDetailsPage() {
                                     <tbody>
                                         {sortedLinks.map((link, i) => {
                                             const isSentCampaign = activeCampaign.status === 'Sent';
-                                            // For sent campaigns, only show contacts that actually received this delivery
-                                            if (isSentCampaign && !link.deliveryStatus) return null;
+                                            let deliveryData: any = null;
+
+                                            if (isSentCampaign) {
+                                                deliveryData = activeCampaign.deliveries?.find((d: any) => d.tokenId === link.id);
+                                            }
 
                                             // Determine Unified Campaign Status
                                             let statusLabel = '-';
@@ -939,13 +942,20 @@ export default function BatchDetailsPage() {
                                             } else if (link.completionStats && !link.completionStats.startsWith('0/')) {
                                                 statusLabel = `Started (${link.completionStats})`;
                                                 statusColor = 'text-primary font-bold';
-                                            } else if (link.email_opened_at) {
+                                            } else if (deliveryData?.email_opened_at || link.email_opened_at) {
                                                 statusLabel = 'Opened';
                                                 statusColor = 'text-accent font-bold';
-                                                if (link.open_count > 1) statusLabel += ` (${link.open_count}x)`;
-                                            } else if (link.email_sent_at) {
+                                                const openCount = deliveryData?.open_count || link.open_count || 0;
+                                                if (openCount > 1) statusLabel += ` (${openCount}x)`;
+                                            } else if (deliveryData?.email_sent_at || link.email_sent_at) {
                                                 statusLabel = 'Sent';
                                                 statusColor = 'text-secondary';
+                                            } else if (deliveryData?.status === 'Failed') {
+                                                statusLabel = 'Failed';
+                                                statusColor = 'text-danger font-bold';
+                                            } else if (isSentCampaign && !deliveryData) {
+                                                statusLabel = 'Skipped / Not Sent';
+                                                statusColor = 'text-danger';
                                             }
                                             return (
                                                 <tr key={i} className={`border-b border-surface-border/50 transition-colors ${!isSentCampaign ? 'cursor-pointer hover:bg-surface/80' : ''} ${selectedTokenIds.includes(link.id) ? 'bg-primary/10' : ''}`} onClick={() => !isSentCampaign && toggleTokenSelection(link.id)}>

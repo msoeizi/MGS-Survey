@@ -23,6 +23,20 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
             }
         });
 
+        // Pre-fetch all deliveries for this batch to backfill missing AccessToken metrics for legacy campaigns
+        const allDeliveries = await prisma.emailDelivery.findMany({
+            where: { campaign: { batchId }, status: { in: ['Sent', 'Delivered'] } },
+            select: { tokenId: true, sent_at: true, opened_at: true }
+        });
+
+        const deliveryMap = new Map();
+        for (const d of allDeliveries) {
+            const existing = deliveryMap.get(d.tokenId) || { sent_at: null, opened_at: null };
+            if (d.sent_at && (!existing.sent_at || d.sent_at > existing.sent_at)) existing.sent_at = d.sent_at;
+            if (d.opened_at && (!existing.opened_at || d.opened_at > existing.opened_at)) existing.opened_at = d.opened_at;
+            deliveryMap.set(d.tokenId, existing);
+        }
+
         // Map safe visual projection for Admin Display
         const previewData = await Promise.all(tokens.map(async (t: any) => {
             // Check submission status
@@ -39,6 +53,8 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
             const submitted = feedbackItems.filter(f => f.status === 'Submitted').length;
             const isCompleted = total > 0 && submitted === total;
 
+            const legacyDeliv = deliveryMap.get(t.id);
+
             return {
                 id: t.id,
                 companyName: t.company?.name || 'Unknown',
@@ -46,8 +62,8 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
                 contactEmail: t.contact?.email || 'N/A',
                 token: t.token, // Display actual string link for clicking
                 created_at: t.created_at,
-                email_sent_at: t.email_sent_at,
-                email_opened_at: t.email_opened_at,
+                email_sent_at: t.email_sent_at || legacyDeliv?.sent_at || null,
+                email_opened_at: t.email_opened_at || legacyDeliv?.opened_at || null,
                 open_count: t.open_count || 0,
                 isCompleted,
                 completionStats: `${submitted}/${total}`

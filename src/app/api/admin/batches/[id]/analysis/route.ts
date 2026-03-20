@@ -11,9 +11,22 @@ export async function GET(
         const batchId = (await params).id;
 
         // 1. Funnel Data
-        const invited = await prisma.accessToken.count({ where: { batchId } });
-        const sent = await prisma.accessToken.count({ where: { batchId, email_sent_at: { not: null } } });
-        const opened = await prisma.accessToken.count({ where: { batchId, email_opened_at: { not: null } } });
+        const allTokens = await prisma.accessToken.findMany({
+            where: { batchId },
+            select: { id: true, email_sent_at: true, email_opened_at: true }
+        });
+
+        const legacyDeliveries = await prisma.emailDelivery.findMany({
+            where: { campaign: { batchId }, status: { in: ['Sent', 'Delivered'] } },
+            select: { tokenId: true, opened_at: true }
+        });
+
+        const legacySentIds = new Set(legacyDeliveries.map(d => d.tokenId));
+        const legacyOpenedIds = new Set(legacyDeliveries.filter(d => d.opened_at).map(d => d.tokenId));
+
+        const invited = allTokens.length;
+        const sent = allTokens.filter(t => t.email_sent_at || legacySentIds.has(t.id)).length;
+        const opened = allTokens.filter(t => t.email_opened_at || legacyOpenedIds.has(t.id)).length;
 
         const feedbackStats = await prisma.feedbackItem.groupBy({
             by: ['status'],
