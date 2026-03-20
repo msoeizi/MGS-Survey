@@ -137,6 +137,7 @@ model AccessToken {
   // These are now superseded by EmailDelivery, but we can leave them for backward compatibility or remove later
   email_sent_at   DateTime?
   email_opened_at DateTime?
+  open_count      Int       @default(0)
 
   // Re-adding correct explicit relations to fix cascade errors during db push
   company Company  @relation(fields: [companyId], references: [id], onDelete: NoAction)
@@ -167,6 +168,7 @@ model EmailDelivery {
   status        String    @default("Pending") // Pending, Sent, Failed
   sent_at       DateTime?
   opened_at     DateTime?
+  open_count    Int       @default(0)
   
   campaign      EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   token         AccessToken   @relation(fields: [tokenId], references: [id], onDelete: Cascade)

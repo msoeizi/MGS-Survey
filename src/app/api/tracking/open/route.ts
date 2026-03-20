@@ -7,10 +7,26 @@ export async function GET(request: NextRequest) {
 
     if (deliveryId) {
         try {
-            await prisma.emailDelivery.update({
+            // Update the specific delivery record
+            const delivery = await prisma.emailDelivery.update({
                 where: { id: deliveryId },
-                data: { opened_at: new Date() }
+                data: { 
+                    opened_at: new Date(),
+                    open_count: { increment: 1 }
+                }
             });
+
+            // Also sync to the AccessToken for global reporting in the batch view
+            if (delivery.tokenId) {
+                await prisma.accessToken.update({
+                    where: { id: delivery.tokenId },
+                    data: { 
+                        email_opened_at: new Date(),
+                        open_count: { increment: 1 }
+                    }
+                });
+            }
+            
             console.log(`[Tracking] Email opened for Delivery: ${deliveryId}`);
         } catch (error) {
             console.error(`[Tracking] Error updating open status for Delivery ${deliveryId}:`, error);

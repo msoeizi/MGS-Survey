@@ -38,8 +38,9 @@ export async function GET(
             contactName: d.token.contact?.name || 'Company-Wide Link',
             contactEmail: d.token.contact?.email || 'N/A',
             status: d.status,
-            sent_at: d.sent_at,
-            opened_at: d.opened_at,
+            email_sent_at: d.sent_at,
+            email_opened_at: d.opened_at,
+            open_count: d.open_count || 0,
         }));
 
         return NextResponse.json({

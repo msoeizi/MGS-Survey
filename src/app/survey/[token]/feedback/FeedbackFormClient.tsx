@@ -158,10 +158,10 @@ export default function FeedbackFormClient({
             </div>
 
             {/* Sticky Save Indicator */}
-            <div className="sticky top-20 z-40 bg-background/80 backdrop-blur pb-4 pt-2 -mx-4 px-4 mb-4 flex justify-end">
-                {savingState === 'saving' && <span className="text-secondary text-sm flex items-center gap-2"><Save className="w-4 h-4 animate-pulse" /> Autosaving...</span>}
-                {savingState === 'saved' && <span className="text-success text-sm flex items-center gap-2"><CheckCircle className="w-4 h-4" /> All changes saved</span>}
-                {savingState === 'error' && <span className="text-danger text-sm flex items-center gap-2"><AlertCircle className="w-4 h-4" /> Save failed</span>}
+            <div className="sticky top-20 z-40 bg-background/80 backdrop-blur pb-3 pt-2 -mx-4 px-4 mb-2 flex justify-end">
+                {savingState === 'saving' && <span className="text-secondary text-xs md:text-sm flex items-center gap-2"><Save className="w-3 h-3 md:w-4 md:h-4 animate-pulse" /> Autosaving...</span>}
+                {savingState === 'saved' && <span className="text-success text-xs md:text-sm flex items-center gap-2"><CheckCircle className="w-3 h-3 md:w-4 md:h-4" /> All changes saved</span>}
+                {savingState === 'error' && <span className="text-danger text-xs md:text-sm flex items-center gap-2"><AlertCircle className="w-3 h-3 md:w-4 md:h-4" /> Save failed</span>}
             </div>
 
             <div className="space-y-12">
@@ -190,9 +190,9 @@ export default function FeedbackFormClient({
                     }
 
                     return (
-                        <div key={item.id} className={`glass-panel p-6 md:p-8 animate-slide-up stagger-${(idx % 4) + 1}`}>
+                        <div key={item.id} className={`glass-panel p-5 md:p-8 animate-slide-up stagger-${(idx % 4) + 1}`}>
                             <div className="border-b border-surface-border pb-4 mb-6 relative">
-                                <h1 className="text-3xl font-bold">{item.project.project_name}</h1>
+                                <h1 className="text-2xl md:text-3xl font-bold">{item.project.project_name}</h1>
 
                                 {/* Details Expander */}
                                 <div className="mt-4">
@@ -216,7 +216,7 @@ export default function FeedbackFormClient({
                             <div className="grid md:grid-cols-2 gap-8">
                                 <div className="col-span-1 md:col-span-2">
                                     <label className="block text-sm font-medium mb-3">Was your company awarded this project?</label>
-                                    <div className="flex flex-col md:flex-row gap-4 max-w-md mt-2">
+                                    <div className="flex flex-wrap gap-3 md:gap-4 max-w-md mt-2">
                                         {['Yes', 'No'].map((opt) => (
                                             <label key={opt} className={`radio-card ${data.awarded === opt ? 'selected' : ''}`}>
                                                 <input
@@ -288,8 +288,8 @@ export default function FeedbackFormClient({
 
                                 {data.awarded === 'No' && (
                                     <div className="col-span-1 md:col-span-2 animate-slide-down">
-                                        <label className="block text-sm font-medium mb-3">How reasonable was our {submittedPrice} quote?</label>
-                                        <div className="flex flex-col md:flex-row gap-4 max-w-2xl mt-2">
+                                        <label className="block text-sm font-medium mb-3">In your professional opinion, how did our {submittedPrice} proposal compare to the market?</label>
+                                        <div className="flex flex-wrap gap-3 md:gap-4 max-w-2xl mt-2">
                                             {['It was fair', 'Too high', 'Too low'].map((opt) => (
                                                 <label key={opt} className={`radio-card ${data.quote_reasonableness === opt ? 'selected' : ''}`}>
                                                     <input
@@ -338,9 +338,9 @@ export default function FeedbackFormClient({
                             }
 
                             return (
-                                <div key={item.id} className={`glass-panel p-6 md:p-8 animate-slide-up stagger-${(idx % 4) + 1}`}>
+                                <div key={item.id} className={`glass-panel p-5 md:p-8 animate-slide-up stagger-${(idx % 4) + 1}`}>
                                     <div className="border-b border-surface-border pb-4 mb-6 relative">
-                                        <h1 className="text-3xl font-bold text-secondary">{item.project.project_name}</h1>
+                                        <h1 className="text-2xl md:text-3xl font-bold text-secondary">{item.project.project_name}</h1>
 
                                         {/* Details Expander */}
                                         <div className="mt-4">
@@ -364,7 +364,7 @@ export default function FeedbackFormClient({
                                     <div className="grid md:grid-cols-2 gap-8">
                                         <div className="col-span-1 md:col-span-2">
                                             <label className="block text-sm font-medium mb-3">Project Award Status</label>
-                                            <div className="flex flex-col md:flex-row gap-4 max-w-md mt-2">
+                                            <div className="flex flex-wrap gap-3 md:gap-4 max-w-md mt-2">
                                                 {['Yes', 'No'].map((opt) => (
                                                     <label key={opt} className={`radio-card ${data.awarded === opt ? 'selected' : ''}`}>
                                                         <input
@@ -437,7 +437,7 @@ export default function FeedbackFormClient({
                                         {data.awarded === 'No' && (
                                             <div className="col-span-1 md:col-span-2 animate-slide-down">
                                                 <label className="block text-sm font-medium mb-3">In your professional opinion, how did our {submittedPrice} proposal compare to the market?</label>
-                                                <div className="flex flex-col md:flex-row gap-4 max-w-2xl mt-2">
+                                                <div className="flex flex-wrap gap-3 md:gap-4 max-w-2xl mt-2">
                                                     {['It was fair', 'Too high', 'Too low'].map((opt) => (
                                                         <label key={opt} className={`radio-card ${data.quote_reasonableness === opt ? 'selected' : ''}`}>
                                                             <input
@@ -513,8 +513,7 @@ export default function FeedbackFormClient({
             {/* Floating Submit Bar */}
             {!locked && (
                 <div
-                    className="flex flex-col md:flex-row md:justify-between items-center bg-surface p-4 rounded-lg border border-surface-border sticky z-50 transition-all shadow-lg backdrop-blur-md"
-                    style={{ bottom: '15px', margin: '0 15px 15px 15px' }}
+                    className="flex flex-col md:flex-row md:justify-between items-center bg-surface p-4 rounded-lg md:rounded-lg border border-surface-border sticky z-50 transition-all shadow-lg backdrop-blur-md bottom-4 mx-0 md:mx-4 mb-4"
                 >
                     <div className="text-secondary text-sm mb-3 md:mb-0 text-center md:text-left hidden md:block w-full md:w-auto">
                         You can safely close this page and return later. Your progress is autosaved.

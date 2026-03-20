@@ -41,3 +41,10 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# local data
+*.db
+*.db-journal
+debug_campaign.*
+missing_emails.txt
+src/app/api/admin/debug-delivery/

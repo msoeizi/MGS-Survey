@@ -132,9 +132,16 @@ export async function POST(
                     successCount++;
                     // Mark delivery as sent
                     console.log(`[SendRoute] Updating delivery ${delivery.id} to Sent...`);
+                    const sentDate = new Date();
                     await prisma.emailDelivery.update({
                         where: { id: delivery.id },
-                        data: { status: 'Sent', sent_at: new Date() }
+                        data: { status: 'Sent', sent_at: sentDate }
+                    });
+
+                    // Also sync to the AccessToken for global reporting
+                    await prisma.accessToken.update({
+                        where: { id: t.id },
+                        data: { email_sent_at: sentDate }
                     });
                 }
             } catch (resendError: any) {

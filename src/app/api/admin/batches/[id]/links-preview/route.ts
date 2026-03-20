@@ -48,6 +48,7 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
                 created_at: t.created_at,
                 email_sent_at: t.email_sent_at,
                 email_opened_at: t.email_opened_at,
+                open_count: t.open_count || 0,
                 isCompleted,
                 completionStats: `${submitted}/${total}`
             };

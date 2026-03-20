@@ -11,21 +11,9 @@ export async function GET(
         const batchId = (await params).id;
 
         // 1. Funnel Data
-        const totalTokens = await prisma.accessToken.count({ where: { batchId } });
-        
-        const totalSent = await prisma.emailDelivery.count({
-            where: {
-                campaign: { batchId },
-                status: 'Sent'
-            }
-        });
-
-        const totalOpened = await prisma.emailDelivery.count({
-            where: {
-                campaign: { batchId },
-                opened_at: { not: null }
-            }
-        });
+        const invited = await prisma.accessToken.count({ where: { batchId } });
+        const sent = await prisma.accessToken.count({ where: { batchId, email_sent_at: { not: null } } });
+        const opened = await prisma.accessToken.count({ where: { batchId, email_opened_at: { not: null } } });
 
         const feedbackStats = await prisma.feedbackItem.groupBy({
             by: ['status'],
@@ -34,9 +22,9 @@ export async function GET(
         });
 
         const funnel = {
-            invited: totalTokens,
-            sent: totalSent,
-            opened: totalOpened,
+            invited,
+            sent,
+            opened,
             started: feedbackStats.find(s => s.status === 'InProgress')?._count || 0,
             submitted: feedbackStats.find(s => s.status === 'Submitted')?._count || 0,
         };

@@ -27,8 +27,8 @@ export default async function SurveyLandingPage(props: {
 
     return (
         <div className="animate-slide-down">
-            <div className="glass-panel p-8 md:p-14 text-left shadow-xl max-w-2xl mx-auto mt-12 flex flex-col items-center">
-                <h1 className="text-4xl font-bold tracking-tight mb-10 text-center">Hello, {contactName}</h1>
+            <div className="glass-panel p-6 md:p-14 text-left shadow-xl max-w-2xl mx-auto mt-8 md:mt-12 flex flex-col items-center">
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-8 md:mb-10 text-center">Hello, {contactName}</h1>
                 <p className="text-xl text-secondary mb-10 leading-relaxed w-full">
                     We truly appreciate you taking the time to provide feedback on your experience with {company?.name}.
                 </p>

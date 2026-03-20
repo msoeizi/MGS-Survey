@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { DownloadCloud, ArrowLeft, RefreshCw, FileText, Mail, CheckCircle2, Circle, Plus, Edit2, Copy, Send, Trash2, Calendar, Eye, Save } from 'lucide-react';
+import { DownloadCloud, ArrowLeft, RefreshCw, FileText, Mail, CheckCircle2, Circle, Plus, Edit2, Copy, Send, Trash2, Calendar, Eye, Save, Users, Users2 } from 'lucide-react';
 import Papa from 'papaparse';
 
 type Batch = {
@@ -33,7 +33,7 @@ export default function BatchDetailsPage() {
     const [loadingAnalysis, setLoadingAnalysis] = useState(false);
  
     // Tabs
-    const [activeTab, setActiveTab] = useState<'overview' | 'campaigns' | 'feedback'>('feedback');
+    const [activeTab, setActiveTab] = useState<'overview' | 'campaigns' | 'feedback' | 'recipients' | 'analysis'>('overview');
  
     // New state for advanced feedback tracking
     const [groupBy, setGroupBy] = useState<'None' | 'Company' | 'Project'>('None');
@@ -58,6 +58,7 @@ export default function BatchDetailsPage() {
     const [sortField, setSortField] = useState<string>('companyName');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const [searchTerm, setSearchTerm] = useState('');
+    const [funnelFilter, setFunnelFilter] = useState<string | null>(null);
 
     const handleSort = (field: string) => {
         if (sortField === field) {
@@ -71,11 +72,20 @@ export default function BatchDetailsPage() {
     const getFilteredLinks = () => {
         const filtered = links.filter(link => {
             const search = searchTerm.toLowerCase();
-            return (
+            const matchesSearch = (
                 (link.companyName || '').toLowerCase().includes(search) ||
                 (link.contactName || '').toLowerCase().includes(search) ||
                 (link.contactEmail || '').toLowerCase().includes(search)
             );
+
+            if (!matchesSearch) return false;
+
+            if (funnelFilter === 'Sent') return !!link.email_sent_at;
+            if (funnelFilter === 'Opened') return !!link.email_opened_at;
+            if (funnelFilter === 'Started') return link.completionStats && !link.completionStats.startsWith('0/') && !link.isCompleted;
+            if (funnelFilter === 'Submitted') return !!link.isCompleted;
+
+            return true;
         });
 
         return filtered.sort((a, b) => {
@@ -336,7 +346,8 @@ export default function BatchDetailsPage() {
                         ...l,
                         deliveryStatus: !!delivery,
                         email_sent_at: delivery?.sent_at,
-                        opened_at: delivery?.opened_at
+                        email_opened_at: delivery?.email_opened_at,
+                        open_count: delivery?.open_count || 0
                     };
                 });
                 setLinks(updatedLinks);
@@ -469,6 +480,7 @@ export default function BatchDetailsPage() {
             <div className="flex gap-2 border-b border-surface-border mb-10 overflow-x-auto scroller-hidden">
                 {[
                     { id: 'overview', label: 'Overview & Export', icon: <RefreshCw className="w-4 h-4" /> },
+                    { id: 'recipients', label: 'Recipients Status', icon: <Users className="w-4 h-4" /> },
                     { id: 'campaigns', label: 'Email Campaigns', icon: <Mail className="w-4 h-4" /> },
                     { id: 'feedback', label: 'Feedback Tracking', icon: <CheckCircle2 className="w-4 h-4" /> },
                 ].map((tab) => {
@@ -538,15 +550,23 @@ export default function BatchDetailsPage() {
                                 <div className="space-y-6">
                                     {[
                                         { label: 'Invited', count: analysis.funnel.invited, color: 'bg-secondary' },
+                                        { label: 'Sent', count: analysis.funnel.sent, color: 'bg-indigo-500' },
                                         { label: 'Opened', count: analysis.funnel.opened, color: 'bg-accent' },
                                         { label: 'Started', count: (analysis.funnel.submitted + analysis.funnel.started), color: 'bg-primary' },
                                         { label: 'Submitted', count: analysis.funnel.submitted, color: 'bg-success' },
                                     ].map((step, idx, arr) => {
                                         const pct = arr[0].count > 0 ? (step.count / arr[0].count) * 100 : 0;
                                         return (
-                                            <div key={idx} className="relative group">
+                                            <div 
+                                                key={idx} 
+                                                className="relative group cursor-pointer hover:bg-surface/50 p-2 -m-2 rounded-lg transition-colors border border-transparent hover:border-surface-border"
+                                                onClick={() => {
+                                                    setFunnelFilter(step.label === 'Invited' ? null : step.label);
+                                                    setActiveTab('recipients');
+                                                }}
+                                            >
                                                 <div className="flex justify-between items-center mb-1 text-sm">
-                                                    <span className="font-semibold text-secondary">{step.label}</span>
+                                                    <span className="font-semibold text-secondary group-hover:text-primary transition-colors">{step.label}</span>
                                                     <span className="font-bold">{step.count} ({Math.round(pct)}%)</span>
                                                 </div>
                                                 <div className="w-full h-8 bg-surface-border/30 rounded-full overflow-hidden flex items-center">
@@ -568,35 +588,6 @@ export default function BatchDetailsPage() {
                                 </div>
                             </div>
  
-                            {/* Sentiment & Impact */}
-                            <div className="flex flex-col gap-6">
-                                <div className="glass-panel p-6 flex-1">
-                                    <h3 className="text-sm font-bold mb-4 uppercase text-secondary">Quote Sentiment</h3>
-                                    <div className="space-y-3">
-                                        {analysis.sentiment?.map((s: any, i: number) => (
-                                            <div key={i} className="flex justify-between items-center text-xs">
-                                                <span className="text-secondary">{s.label}</span>
-                                                <span className="font-bold text-primary">{s.count}</span>
-                                            </div>
-                                        ))}
-                                        {(!analysis.sentiment || analysis.sentiment.length === 0) && <div className="text-xs text-secondary italic">No sentiment data yet.</div>}
-                                    </div>
-                                </div>
-
-                                <div className="glass-panel p-6 flex-1 bg-primary/5">
-                                    <h3 className="text-sm font-bold mb-4 uppercase text-primary">Follow-up Impact</h3>
-                                    <div className="space-y-3">
-                                        {analysis.impact?.map((imp: any, i: number) => (
-                                            <div key={i} className="flex justify-between items-center text-xs">
-                                                <span className="text-secondary">{imp.label}</span>
-                                                <span className={`font-bold ${imp.label === 'High' ? 'text-success' : 'text-primary'}`}>{imp.count}</span>
-                                            </div>
-                                        ))}
-                                        {(!analysis.impact || analysis.impact.length === 0) && <div className="text-xs text-secondary italic">No impact recorded yet.</div>}
-                                    </div>
-                                </div>
-                            </div>
-
                             {/* Win/Loss & Reasons */}
                             <div className="flex flex-col gap-6">
                                 <div className="glass-panel p-6 flex-1">
@@ -893,8 +884,7 @@ export default function BatchDetailsPage() {
                                         <tr>
                                             {activeCampaign.status === 'Draft' && <th className="py-2 px-3 w-10"></th>}
                                             <th className="py-2 px-3 font-semibold text-secondary">Contact</th>
-                                            <th className="py-2 px-3 font-semibold text-secondary w-20 text-center">Open</th>
-                                            <th className="py-2 px-3 font-semibold text-secondary w-20 text-center">Progress</th>
+                                            <th className="py-2 px-3 font-semibold text-secondary w-32 text-center">Campaign Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -903,6 +893,24 @@ export default function BatchDetailsPage() {
                                             // For sent campaigns, only show contacts that actually received this delivery
                                             if (isSentCampaign && !link.deliveryStatus) return null;
 
+                                            // Determine Unified Campaign Status
+                                            let statusLabel = '-';
+                                            let statusColor = 'text-surface-border';
+
+                                            if (link.isCompleted) {
+                                                statusLabel = 'Submitted';
+                                                statusColor = 'text-success font-bold';
+                                            } else if (link.completionStats && !link.completionStats.startsWith('0/')) {
+                                                statusLabel = `Started (${link.completionStats})`;
+                                                statusColor = 'text-primary font-bold';
+                                            } else if (link.email_opened_at) {
+                                                statusLabel = 'Opened';
+                                                statusColor = 'text-accent font-bold';
+                                                if (link.open_count > 1) statusLabel += ` (${link.open_count}x)`;
+                                            } else if (link.email_sent_at) {
+                                                statusLabel = 'Sent';
+                                                statusColor = 'text-secondary';
+                                            }
                                             return (
                                                 <tr key={i} className={`border-b border-surface-border/50 transition-colors ${!isSentCampaign ? 'cursor-pointer hover:bg-surface/80' : ''} ${selectedTokenIds.includes(link.id) ? 'bg-primary/10' : ''}`} onClick={() => !isSentCampaign && toggleTokenSelection(link.id)}>
                                                     {!isSentCampaign && (
@@ -928,18 +936,9 @@ export default function BatchDetailsPage() {
                                                         <div className="font-medium text-xs break-all">{link.contactEmail}</div>
                                                         <div className="text-xs text-secondary">{link.contactName} ({link.companyName})</div>
                                                     </td>
-                                                    <td className="py-3 px-3 text-center text-[10px] font-mono">
-                                                        {link.email_opened_at ? (
-                                                            <span className="text-success font-bold" title={new Date(link.email_opened_at).toLocaleString()}>Yes</span>
-                                                        ) : link.email_sent_at ? (
-                                                            <span className="text-secondary" title={new Date(link.email_sent_at).toLocaleString()}>Sent</span>
-                                                        ) : (
-                                                            <span className="text-surface-border">-</span>
-                                                        )}
-                                                    </td>
-                                                    <td className="py-3 px-3 text-center text-[10px] font-mono">
-                                                        <span className={link.isCompleted ? 'text-success font-bold' : 'text-accent'}>
-                                                            {link.completionStats}
+                                                    <td className="py-3 px-3 text-center text-[10px] whitespace-nowrap">
+                                                        <span className={statusColor}>
+                                                            {statusLabel}
                                                         </span>
                                                     </td>
                                                 </tr>
@@ -955,6 +954,107 @@ export default function BatchDetailsPage() {
                                 {activeCampaign.status === 'Draft' ? `${selectedTokenIds.length} / ${links.length} selected` : 'Showing all recipients for this campaign'}
                             </div>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {activeTab === 'recipients' && (
+                <div className="glass-panel p-6 mt-8 animate-fade-in-up">
+                    <div className="flex justify-between items-center mb-6">
+                        <div className="flex items-center gap-3">
+                            <Users className="w-6 h-6 text-primary" />
+                            <div>
+                                <h3 className="text-xl font-bold italic">Audience Status</h3>
+                                {funnelFilter && (
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1">
+                                            Filter: {funnelFilter}
+                                            <button onClick={() => setFunnelFilter(null)} className="hover:text-danger">×</button>
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Search audience..."
+                                    className="text-xs py-2 pl-8 pr-8"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary opacity-50">
+                                    <Users2 className="w-3 h-3" />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="overflow-x-auto border border-surface-border rounded-lg">
+                        <table className="w-full text-left border-collapse text-sm">
+                            <thead className="bg-surface/50">
+                                <tr className="border-b border-surface-border">
+                                    <th className="py-3 px-4 font-semibold text-secondary">Contact / Company</th>
+                                    <th className="py-3 px-4 font-semibold text-secondary text-center">Invited Date</th>
+                                    <th className="py-3 px-4 font-semibold text-secondary text-center">Sent</th>
+                                    <th className="py-3 px-4 font-semibold text-secondary text-center">Opened</th>
+                                    <th className="py-3 px-4 font-semibold text-secondary text-center">Progress</th>
+                                    <th className="py-3 px-4 font-semibold text-secondary text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {sortedLinks.map((link, i) => (
+                                    <tr key={i} className="border-b border-surface-border/50 hover:bg-surface/30 transition-colors">
+                                        <td className="py-4 px-4">
+                                            <div className="font-bold text-primary">{link.contactName}</div>
+                                            <div className="text-xs text-secondary">{link.companyName} — {link.contactEmail}</div>
+                                        </td>
+                                        <td className="py-4 px-4 text-center text-xs text-secondary font-mono">
+                                            {new Date(link.created_at).toLocaleDateString()}
+                                        </td>
+                                        <td className="py-4 px-4 text-center">
+                                            {link.email_sent_at ? (
+                                                <span className="text-[10px] bg-indigo-500/10 text-indigo-500 px-2 py-1 rounded font-bold" title={new Date(link.email_sent_at).toLocaleString()}>SENT</span>
+                                            ) : <span className="text-surface-border text-xs">-</span>}
+                                        </td>
+                                        <td className="py-4 px-4 text-center">
+                                            {link.email_opened_at ? (
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-[10px] bg-success/10 text-success px-2 py-1 rounded font-bold" title={new Date(link.email_opened_at).toLocaleString()}>OPENED</span>
+                                                    {link.open_count > 1 && <span className="text-[9px] text-secondary opacity-60 mt-0.5">{link.open_count}x</span>}
+                                                </div>
+                                            ) : <span className="text-surface-border text-xs">-</span>}
+                                        </td>
+                                        <td className="py-4 px-4 text-center">
+                                            <span className={`text-xs font-mono font-bold ${link.isCompleted ? 'text-success' : 'text-primary'}`}>
+                                                {link.completionStats}
+                                            </span>
+                                        </td>
+                                        <td className="py-4 px-4 text-right">
+                                            <button 
+                                                onClick={() => {
+                                                    const url = `${window.location.protocol}//${window.location.host}/survey/${link.token}`;
+                                                    navigator.clipboard.writeText(url);
+                                                    alert('Survey link copied!');
+                                                }}
+                                                className="text-primary hover:underline text-xs"
+                                            >
+                                                Copy Link
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {sortedLinks.length === 0 && (
+                                    <tr>
+                                        <td colSpan={6} className="py-20 text-center text-secondary italic grayscale opacity-50">
+                                            No recipients match your current filters. 
+                                            <button onClick={() => {setFunnelFilter(null); setSearchTerm('');}} className="ml-2 text-primary hover:underline not-italic">Clear all filters</button>
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             )}

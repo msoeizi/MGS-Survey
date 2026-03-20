@@ -155,8 +155,7 @@ export default function ProjectSelectionClient({
             </div>
 
             <div
-                className="flex flex-col md:flex-row md:justify-between items-center bg-surface p-4 rounded-lg border border-surface-border sticky z-50 transition-all shadow-lg backdrop-blur-md"
-                style={{ bottom: '15px', margin: '0 15px 15px 15px' }}
+                className="flex flex-col md:flex-row md:justify-between items-center bg-surface p-4 rounded-lg md:rounded-lg border border-surface-border sticky z-50 transition-all shadow-lg backdrop-blur-md bottom-4 mx-0 md:mx-4 mb-4"
             >
                 <div className="text-secondary font-medium mb-3 md:mb-0 text-center md:text-left w-full md:w-auto">
                     {selected.size} of {items.length} selected
