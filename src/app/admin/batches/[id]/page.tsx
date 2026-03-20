@@ -33,6 +33,8 @@ import {
     Eye,
     Save
 } from 'lucide-react';
+import { Tooltip } from '@/components/ui/Tooltip';
+
 import Papa from 'papaparse';
 
 type Batch = {
@@ -549,14 +551,16 @@ export default function BatchDetailsPage() {
                             <p className="text-sm text-secondary mb-6">
                                 Generate and download the unique, secure access links to send to your invited contacts.
                             </p>
-                            <button
-                                onClick={handleExportLinks}
-                                disabled={exporting}
-                                className="btn w-full justify-center gap-2 bg-accent hover:opacity-90 text-white shadow-md border-none"
-                            >
-                                {exporting ? <RefreshCw className="w-5 h-5 animate-spin" /> : <DownloadCloud className="w-5 h-5" />}
-                                {exporting ? 'Generating...' : 'Export Links to CSV'}
-                            </button>
+                            <Tooltip content="Downloads a spreadsheet with all unique survey access links for you to distribute manually." className="w-full block">
+                                <button
+                                    onClick={handleExportLinks}
+                                    disabled={exporting}
+                                    className="btn w-full justify-center gap-2 bg-accent hover:opacity-90 text-white shadow-md border-none"
+                                >
+                                    {exporting ? <RefreshCw className="w-5 h-5 animate-spin" /> : <DownloadCloud className="w-5 h-5" />}
+                                    {exporting ? 'Generating...' : 'Export Links to CSV'}
+                                </button>
+                            </Tooltip>
                         </div>
  
                         <div className="glass-panel p-6 border-l-4 border-l-success">
@@ -564,12 +568,14 @@ export default function BatchDetailsPage() {
                             <p className="text-sm text-secondary mb-6">
                                 Download the collected feedback data from this campaign. Only visible to internal admins.
                             </p>
-                            <button
-                                onClick={handleExportResults}
-                                className="btn btn-primary w-full justify-center gap-2"
-                            >
-                                <FileText className="w-5 h-5" /> Export Results to CSV
-                            </button>
+                            <Tooltip content="Downloads a spreadsheet containing all responses submitted by participants for this specific campaign." className="w-full block">
+                                <button
+                                    onClick={handleExportResults}
+                                    className="btn btn-primary w-full justify-center gap-2"
+                                >
+                                    <FileText className="w-5 h-5" /> Export Results to CSV
+                                </button>
+                            </Tooltip>
                         </div>
                     </div>
  
@@ -585,26 +591,26 @@ export default function BatchDetailsPage() {
                                 </h3>
                                 <div className="space-y-6">
                                     {[
-                                        { label: 'Invited', count: analysis.funnel.invited, color: 'bg-secondary' },
-                                        { label: 'Sent', count: analysis.funnel.sent, color: 'bg-indigo-500' },
-                                        { label: 'Opened', count: analysis.funnel.opened, color: 'bg-accent' },
-                                        { label: 'Started', count: (analysis.funnel.submitted + analysis.funnel.started), color: 'bg-primary' },
-                                        { label: 'Submitted', count: analysis.funnel.submitted, color: 'bg-success' },
+                                        { label: 'Invited', count: analysis.funnel.invited, color: 'bg-secondary', tip: 'Total number of access links generated for this batch.' },
+                                        { label: 'Sent', count: analysis.funnel.sent, color: 'bg-indigo-500', tip: 'Number of contacts who successfully received at least one email.' },
+                                        { label: 'Opened', count: analysis.funnel.opened, color: 'bg-accent', tip: 'Number of contacts who safely opened your email.' },
+                                        { label: 'Started', count: (analysis.funnel.submitted + analysis.funnel.started), color: 'bg-primary', tip: 'Number of contacts who clicked the link and started the survey.' },
+                                        { label: 'Submitted', count: analysis.funnel.submitted, color: 'bg-success', tip: 'Number of contacts who successfully completed and submitted the survey.' },
                                     ].map((step, idx, arr) => {
                                         const pct = arr[0].count > 0 ? (step.count / arr[0].count) * 100 : 0;
                                         return (
-                                            <div 
-                                                key={idx} 
-                                                className="relative group cursor-pointer hover:bg-surface/50 p-2 -m-2 rounded-lg transition-colors border border-transparent hover:border-surface-border"
-                                                onClick={() => {
-                                                    setFunnelFilter(step.label === 'Invited' ? null : step.label);
-                                                    setActiveTab('recipients');
-                                                }}
-                                            >
-                                                <div className="flex justify-between items-center mb-1 text-sm">
-                                                    <span className="font-semibold text-secondary group-hover:text-primary transition-colors">{step.label}</span>
-                                                    <span className="font-bold">{step.count} ({Math.round(pct)}%)</span>
-                                                </div>
+                                            <Tooltip key={idx} content={step.tip} className="w-full block" position="top">
+                                                <div 
+                                                    className="w-full relative group/funnel cursor-pointer hover:bg-surface/50 p-2 -m-2 rounded-lg transition-colors border border-transparent hover:border-surface-border"
+                                                    onClick={() => {
+                                                        setFunnelFilter(step.label === 'Invited' ? null : step.label);
+                                                        setActiveTab('recipients');
+                                                    }}
+                                                >
+                                                    <div className="flex justify-between items-center mb-1 text-sm">
+                                                        <span className="font-semibold text-secondary group-hover/funnel:text-primary transition-colors">{step.label}</span>
+                                                        <span className="font-bold">{step.count} ({Math.round(pct)}%)</span>
+                                                    </div>
                                                 <div className="w-full h-8 bg-surface-border/30 rounded-full overflow-hidden flex items-center">
                                                     <div
                                                         className={`h-full ${step.color} transition-all duration-1000 ease-out flex items-center px-4`}
@@ -619,6 +625,7 @@ export default function BatchDetailsPage() {
                                                     </div>
                                                 )}
                                             </div>
+                                        </Tooltip>
                                         );
                                     })}
                                 </div>
@@ -629,15 +636,19 @@ export default function BatchDetailsPage() {
                                 <div className="glass-panel p-6 flex-1">
                                     <h3 className="text-lg font-bold mb-4">Win/Loss Split</h3>
                                     <div className="flex items-center gap-4 mb-6">
-                                        <div className="flex-1 text-center">
-                                            <div className="text-2xl font-bold text-success">{analysis.winLoss.won}</div>
-                                            <div className="text-[10px] text-secondary uppercase">Awarded</div>
-                                        </div>
+                                        <Tooltip content="Contracts formally awarded to your company." className="flex-1" position="top">
+                                            <div className="flex-1 text-center cursor-help">
+                                                <div className="text-2xl font-bold text-success">{analysis.winLoss.won}</div>
+                                                <div className="text-[10px] text-secondary uppercase">Awarded</div>
+                                            </div>
+                                        </Tooltip>
                                         <div className="w-px h-10 bg-surface-border"></div>
-                                        <div className="flex-1 text-center">
-                                            <div className="text-2xl font-bold text-danger">{analysis.winLoss.lost}</div>
-                                            <div className="text-[10px] text-secondary uppercase">Not Awarded</div>
-                                        </div>
+                                        <Tooltip content="Contracts where another company was selected." className="flex-1" position="top">
+                                            <div className="flex-1 text-center cursor-help">
+                                                <div className="text-2xl font-bold text-danger">{analysis.winLoss.lost}</div>
+                                                <div className="text-[10px] text-secondary uppercase">Not Awarded</div>
+                                            </div>
+                                        </Tooltip>
                                     </div>
                                     {/* Small Bar */}
                                     <div className="w-full h-3 bg-surface-border/30 rounded-full flex overflow-hidden">
@@ -791,12 +802,14 @@ export default function BatchDetailsPage() {
                                     <button onClick={saveDraft} className="btn bg-surface-border text-foreground hover:bg-surface btn-sm flex items-center gap-2">
                                         {savingDraft ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Save Draft
                                     </button>
-                                    <button onClick={handleSendEmails} disabled={sendingEmails} className="btn btn-primary shadow-glow btn-sm flex items-center gap-2">
-                                        {sendingEmails ? <RefreshCw className="w-4 h-4 animate-spin" /> : (
-                                            scheduledFor ? <Calendar className="w-4 h-4" /> : <Send className="w-4 h-4" />
-                                        )}
-                                        {scheduledFor ? `Schedule for ${new Date(scheduledFor).toLocaleDateString()}` : 'Dispatch Immediately'}
-                                    </button>
+                                    <Tooltip content="Instantly fires the email sequence or securely pushes it to the automated server queue if a scheduled date is provided." position="bottom">
+                                        <button onClick={handleSendEmails} disabled={sendingEmails} className="btn btn-primary shadow-glow btn-sm flex items-center gap-2">
+                                            {sendingEmails ? <RefreshCw className="w-4 h-4 animate-spin" /> : (
+                                                scheduledFor ? <Calendar className="w-4 h-4" /> : <Send className="w-4 h-4" />
+                                            )}
+                                            {scheduledFor ? `Schedule for ${new Date(scheduledFor).toLocaleDateString()}` : 'Dispatch Immediately'}
+                                        </button>
+                                    </Tooltip>
                                 </>
                             ) : (
                                 <span className="bg-success/20 text-success px-3 py-1 rounded font-bold text-sm">Campaign Locked (Sent)</span>
@@ -891,10 +904,10 @@ export default function BatchDetailsPage() {
                                     {activeCampaign.status === 'Draft' && (
                                         <div className="flex flex-wrap gap-2 text-[10px] items-center">
                                             <span className="text-secondary font-medium mr-2">{selectedTokenIds.length} selected</span>
-                                            <button onClick={selectAllContacts} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">All</button>
-                                            <button onClick={selectUnsent} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">Unsent</button>
-                                            <button onClick={selectNonOpeners} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors text-accent border border-accent/30">Non-Openers</button>
-                                            <button onClick={selectIncomplete} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors text-danger border border-danger/30">Incomplete</button>
+                                            <Tooltip content="Selects all contacts in this batch."><button onClick={selectAllContacts} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">All</button></Tooltip>
+                                            <Tooltip content="Selects contacts who never successfully received any email across any campaign in this batch."><button onClick={selectUnsent} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">Unsent</button></Tooltip>
+                                            <Tooltip content="Selects contacts who successfully received an email but haven't opened it."><button onClick={selectNonOpeners} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors text-accent border border-accent/30">Non-Openers</button></Tooltip>
+                                            <Tooltip content="Selects contacts who clicked on the survey but haven't submitted it yet."><button onClick={selectIncomplete} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors text-danger border border-danger/30">Incomplete</button></Tooltip>
                                         </div>
                                     )}
                                 </div>
