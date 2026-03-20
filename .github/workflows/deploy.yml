@@ -58,4 +58,5 @@ jobs:
             
             npm run build
             pm2 restart all || pm2 start npm --name "survey-app" -- start
+            pm2 restart survey-cron || pm2 start scripts/cron.js --name "survey-cron"
             pm2 save
