@@ -15,8 +15,10 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    // Protect Admin API Routes
-    if (pathname.startsWith('/api/admin') && pathname !== '/api/admin/login') {
+    // Protect Admin API Routes (exclude login and system/server-to-server routes)
+    if (pathname.startsWith('/api/admin') 
+        && pathname !== '/api/admin/login'
+        && !pathname.startsWith('/api/admin/system')) {
         const token = request.cookies.get('admin_token')?.value;
         if (!token || !(await verifyAdminToken(token))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
