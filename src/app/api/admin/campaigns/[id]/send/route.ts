@@ -44,6 +44,22 @@ export async function POST(
         });
 
         console.log(`[SendRoute] Found ${tokens.length} matching tokens in database.`);
+        
+        // Diagnostic: Which IDs were missing if count doesn't match?
+        if (tokens.length !== tokenIds.length) {
+            const foundIds = tokens.map(t => t.id);
+            const missingIds = tokenIds.filter(id => !foundIds.includes(id));
+            console.warn(`[SendRoute] DISCREPANCY: Received ${tokenIds.length} IDs but only found ${tokens.length} in DB for this batch.`);
+            console.warn(`[SendRoute] Missing IDs:`, missingIds);
+            
+            // Also check if these missing IDs exist at all in the DB (maybe wrong batch?)
+            const existsElsewhere = await prisma.accessToken.findMany({
+                where: { id: { in: missingIds } },
+                select: { id: true, batchId: true }
+            });
+            console.warn(`[SendRoute] Missing IDs batch source:`, existsElsewhere);
+        }
+
         if (tokens.length === 0) {
             // Check if tokens exist at all for this batch
             const anyTokens = await prisma.accessToken.count({ where: { batchId: campaign.batchId } });

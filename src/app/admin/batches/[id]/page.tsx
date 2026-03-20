@@ -1,7 +1,38 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { DownloadCloud, ArrowLeft, RefreshCw, FileText, Mail, CheckCircle2, Circle, Plus, Edit2, Copy, Send, Trash2, Calendar, Eye, Save, Users, Users2 } from 'lucide-react';
+import { 
+    LayoutDashboard, 
+    Send, 
+    MoreHorizontal, 
+    Download, 
+    Plus, 
+    Search, 
+    FileText, 
+    BarChart3, 
+    RefreshCw, 
+    Filter, 
+    CheckCircle2, 
+    AlertCircle, 
+    Clock, 
+    Mail, 
+    Copy, 
+    Trash2, 
+    Calendar, 
+    Circle, 
+    PieChart, 
+    ArrowUpRight, 
+    AlertTriangle, 
+    ChevronRight,
+    SearchCode,
+    Users,
+    Users2,
+    ArrowLeft,
+    DownloadCloud,
+    Edit2,
+    Eye,
+    Save
+} from 'lucide-react';
 import Papa from 'papaparse';
 
 type Batch = {
@@ -424,6 +455,7 @@ export default function BatchDetailsPage() {
         if (!confirm(`Are you sure you want to dispatch this campaign to ${selectedTokenIds.length} contacts?`)) return;
 
         setSendingEmails(true);
+        console.log(`[Frontend] Dispatching campaign to ${selectedTokenIds.length} tokens. IDs:`, selectedTokenIds);
         try {
             const res = await fetch(`/api/admin/campaigns/${activeCampaign.id}/send`, {
                 method: 'POST',
