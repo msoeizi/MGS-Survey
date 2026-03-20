@@ -22,7 +22,24 @@ jobs:
           port: 22
           script: |
             cd ~/mgs-survey
+            
+            # CRITICAL: Backup live database before pulling
+            echo "Backing up live database..."
+            cp dev.db dev.db.backup || echo "No dev.db to backup"
+            cp prisma/dev.db prisma/dev.db.backup || true
+            
+            # Stash any local changes that prevent pulling (i.e. git-tracked DB changes)
+            git config --global user.email "deploy@example.com"
+            git config --global user.name "Deploy Action"
+            git stash || echo "Nothing to stash"
+            
             git pull origin main
+            
+            # CRITICAL: Restore the live database immediately
+            echo "Restoring live database..."
+            cp dev.db.backup dev.db || echo "No backup restored for dev.db"
+            cp prisma/dev.db.backup prisma/dev.db || true
+            
             
             # Inject environment variables into .env
             echo "DATABASE_URL=\"file:./dev.db\"" > .env
