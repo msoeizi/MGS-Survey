@@ -26,14 +26,15 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
         // Pre-fetch all deliveries for this batch to backfill missing AccessToken metrics for legacy campaigns
         const allDeliveries = await prisma.emailDelivery.findMany({
             where: { campaign: { batchId }, status: { in: ['Sent', 'Delivered'] } },
-            select: { tokenId: true, sent_at: true, opened_at: true }
+            select: { tokenId: true, sent_at: true, opened_at: true, status: true }
         });
 
         const deliveryMap = new Map();
         for (const d of allDeliveries) {
-            const existing = deliveryMap.get(d.tokenId) || { sent_at: null, opened_at: null };
+            const existing = deliveryMap.get(d.tokenId) || { sent_at: null, opened_at: null, has_sent_status: false };
             if (d.sent_at && (!existing.sent_at || d.sent_at > existing.sent_at)) existing.sent_at = d.sent_at;
             if (d.opened_at && (!existing.opened_at || d.opened_at > existing.opened_at)) existing.opened_at = d.opened_at;
+            if (d.status === 'Sent' || d.status === 'Delivered') existing.has_sent_status = true;
             deliveryMap.set(d.tokenId, existing);
         }
 
@@ -62,7 +63,7 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
                 contactEmail: t.contact?.email || 'N/A',
                 token: t.token, // Display actual string link for clicking
                 created_at: t.created_at,
-                email_sent_at: t.email_sent_at || legacyDeliv?.sent_at || null,
+                email_sent_at: t.email_sent_at || legacyDeliv?.sent_at || (legacyDeliv?.has_sent_status ? new Date().toISOString() : null),
                 email_opened_at: t.email_opened_at || legacyDeliv?.opened_at || null,
                 open_count: t.open_count || 0,
                 isCompleted,

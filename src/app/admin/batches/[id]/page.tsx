@@ -889,7 +889,8 @@ export default function BatchDetailsPage() {
                                         {loadingLinks && <RefreshCw className="w-4 h-4 text-secondary animate-spin" />}
                                     </h4>
                                     {activeCampaign.status === 'Draft' && (
-                                        <div className="flex flex-wrap gap-2 text-[10px]">
+                                        <div className="flex flex-wrap gap-2 text-[10px] items-center">
+                                            <span className="text-secondary font-medium mr-2">{selectedTokenIds.length} selected</span>
                                             <button onClick={selectAllContacts} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">All</button>
                                             <button onClick={selectUnsent} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors">Unsent</button>
                                             <button onClick={selectNonOpeners} className="bg-surface-border hover:bg-surface px-2 py-1 rounded transition-colors text-accent border border-accent/30">Non-Openers</button>
